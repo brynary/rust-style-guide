@@ -34,8 +34,11 @@ Small preferred example.
 
 Optional sections:
 
+- `Activation`
 - `Library vs Application`
 - `Async Notes`
 - `Public API Notes`
 - `Safety Notes`
 - `Decision Points`
+
+Use `Activation` for conditional or advanced pages such as async, typestate, unsafe code, macros, and specialized tooling. It should say when to load the page and when not to.

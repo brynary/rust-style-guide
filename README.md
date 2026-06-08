@@ -12,6 +12,8 @@ This is not the finished style guide yet. The current repository maps the terrai
 - [TEMPLATE.md](TEMPLATE.md): the required format for each topic page.
 - [samples/](samples): sample topic pages in the intended format.
 - [AGENTS.md](AGENTS.md): repository instructions for AI coding agents.
+- [SKILL.md](SKILL.md): draft root skill file using a progressive-disclosure router.
+- [references/topics.md](references/topics.md): draft topic index for the packaged skill.
 
 ## Research
 
@@ -34,3 +36,12 @@ The guide should be Rust-idiomatic with an OO-leaning default:
 3. Follow the drafting order in [DRAFTING.md](DRAFTING.md).
 4. Use the sample pages as format references.
 5. Package the final topic pages as an AI-agent skill.
+
+## Packaging Model
+
+The final skill should use progressive disclosure:
+
+- `SKILL.md` stays small and routes tasks to relevant references.
+- `references/topics.md` indexes the available topic pages.
+- Focused topic pages live under `references/`.
+- Planning files like `README.md`, `OUTLINE.md`, `DRAFTING.md`, `DECISIONS.md`, and `.ai/research/` stay outside the packaged skill unless explicitly needed.

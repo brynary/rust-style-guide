@@ -5,9 +5,10 @@ Use these instructions when turning the outline into topic pages.
 ## Priorities
 
 1. Resolve the decision register in [DECISIONS.md](DECISIONS.md).
-2. Draft the core pages first: errors, panics, type/API design, ownership, async, logging, linting, and testing.
-3. Add advanced pages only where the target codebase needs them.
-4. Keep every page mechanical enough for an agent to follow.
+2. Keep [SKILL.md](SKILL.md) small and use it as a router.
+3. Draft the core pages first: errors, panics, type/API design, ownership, async, logging, linting, and testing.
+4. Add advanced pages only where the target codebase needs them.
+5. Keep every page mechanical enough for an agent to follow.
 
 ## Drafting Order
 
@@ -30,6 +31,15 @@ Use these instructions when turning the outline into topic pages.
 - Add a small preferred Rust example when the topic affects code shape.
 - Put unresolved choices in `Decision Points` instead of burying them in prose.
 
+## Progressive Disclosure
+
+- Treat [SKILL.md](SKILL.md) as the root router, not the guide itself.
+- Keep detailed rules in `references/` topic pages.
+- Keep [references/topics.md](references/topics.md) as the one-page topic index.
+- Link reference files directly from [SKILL.md](SKILL.md) or [references/topics.md](references/topics.md); avoid deep reference chains.
+- Do not load every topic page for ordinary tasks.
+- Use routing examples for common task types so agents know which pages to load.
+
 ## Scope Rules
 
 - Do not re-teach Rust syntax or ownership basics unless a style choice depends on them.
@@ -37,3 +47,4 @@ Use these instructions when turning the outline into topic pages.
 - Do not add advanced topics unless they affect likely agent output.
 - Keep library/application differences explicit when the right answer changes by context.
 - Treat public API guidance as stricter than internal application guidance.
+- Do not package planning files, research reports, or samples into the final skill unless the user explicitly asks for them.

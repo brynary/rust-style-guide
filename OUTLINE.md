@@ -12,6 +12,10 @@ Use [DRAFTING.md](DRAFTING.md) for drafting order, scope, and page-writing guida
 
 Use [TEMPLATE.md](TEMPLATE.md) for every topic page.
 
+## Packaged Skill Shape
+
+The final skill should follow the progressive-disclosure pattern in [SKILL.md](SKILL.md) and [references/topics.md](references/topics.md): a small root router plus focused reference pages. Planning files and research reports should not be part of the packaged skill by default.
+
 ## Decision Register
 
 Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting final policy pages.
