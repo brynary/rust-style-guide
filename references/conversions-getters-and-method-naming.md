@@ -2,16 +2,17 @@
 
 ## Rule
 
-Prefer concrete borrowed parameters and owned return values, use generic conversion bounds only when they clearly help callers, and follow Rust naming conventions for accessors and conversions.
+Prefer concrete borrowed parameters, borrowed field-like accessors, and owned return values for conversions, snapshots, and builders. Use generic conversion bounds only when they clearly help callers.
 
 ## Why
 
-Concrete refs make APIs easy to read and call. Owned returns and internal clones avoid unnecessary lifetime coupling. Rust method names carry ownership and allocation expectations, so `as_`, `to_`, `into_`, and conversion traits should be used consistently.
+Concrete refs make APIs easy to read and call. Owned returns and internal clones avoid unnecessary lifetime coupling when a method builds independent data. Rust method names carry ownership and allocation expectations, so field-like accessors should borrow, while `as_`, `to_`, and `into_` should be used consistently.
 
 ## Do
 
 - Accept `&str`, `&[T]`, `&Path`, and concrete refs for read-only inputs by default.
-- Clone internally when storing borrowed input or returning an owned result keeps the API simpler.
+- Clone internally when storing borrowed input or returning an explicitly owned result keeps the API simpler.
+- Return borrowed values from cheap field-like accessors where the lifetime is obvious.
 - Return owned values from queries, snapshots, and builders when returning references would expose unnecessary lifetimes.
 - Use `impl AsRef<Path>` or similar bounds only when the API is clearly path-like and caller flexibility helps.
 - Use `impl Into<String>` or `impl Into<T>` mainly for constructors and setters that store the owned value.
@@ -27,7 +28,8 @@ Concrete refs make APIs easy to read and call. Owned returns and internal clones
 
 - Do not add generic `AsRef`, `Into`, or `Borrow` bounds to every parameter by habit.
 - Do not accept owned `String`, `Vec<T>`, or `PathBuf` unless the API consumes ownership or the owned type is the natural input.
-- Do not expose lifetimes just to avoid cheap clones.
+- Do not expose named lifetimes just to avoid cheap clones.
+- Do not use bare-noun accessors for owned snapshots, such as `labels() -> Vec<_>`.
 - Do not use `From` for conversions that can fail, validate, allocate surprisingly, or lose important meaning.
 - Do not use `as_*` for methods that allocate or clone.
 - Do not use `get_*` for simple field-like accessors.
@@ -142,5 +144,5 @@ pub struct ProjectConfigSnapshot {
 
 - Accept owned values when the function consumes them, stores them without cloning, or mirrors a standard library convention.
 - Use generic bounds in low-level utilities where caller flexibility is the main point of the function.
-- Return borrowed values from cheap accessors and iterators where the lifetime is obvious and does not leak complexity.
+- Return owned snapshots from methods whose names signal ownership, such as `snapshot`, `to_*`, or `*_snapshot`.
 - Use `get_*` for keyed lookups, cache retrieval, or fallible/computed access where the method is not simple field-like observation.

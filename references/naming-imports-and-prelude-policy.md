@@ -17,7 +17,7 @@ Consistent names and imports make code easier for agents to scan and modify. Rus
 - Prefer `as _` imports for extension traits used only for methods.
 - Keep fields private by default.
 - Use public fields for plain data with no invariants.
-- Use Rust-style accessors when callers need read access: `id()`, `email()`, `status()`.
+- Use Rust-style accessors when callers need read access: `id()`, `email()`, `status()`. Borrow unless returning a small `Copy` value.
 - Use predicate names for booleans: `is_active()`, `has_children()`, `can_retry()`.
 
 ## Avoid
@@ -28,6 +28,7 @@ Consistent names and imports make code easier for agents to scan and modify. Rus
 - Do not expose fields just to avoid writing a useful accessor.
 - Do not generate getters for every private field by habit.
 - Do not use `get_foo()` for cheap field-like access.
+- Do not use bare accessor names for methods that clone or allocate.
 
 ## Example
 

@@ -2,15 +2,16 @@
 
 ## Rule
 
-Prefer lifetime elision, owned return values, and cheap clones; use explicit lifetimes only when borrowing is core to the API.
+Prefer lifetime elision, borrowed plain accessors, owned return values, and cheap clones; use explicit lifetimes only when borrowing is core to the API.
 
 ## Why
 
-Most application APIs are easier to call and refactor when they own their returned data. Explicit lifetimes are valuable for borrowed views, parsers, iterators, and zero-copy APIs, but they add coupling that agents often spread too far.
+Most application APIs are easier to call and refactor when they own independent returned data. Plain accessors can borrow without adding named lifetimes. Explicit lifetimes are valuable for borrowed views, parsers, iterators, and zero-copy APIs, but they add coupling that agents often spread too far.
 
 ## Do
 
 - Rely on lifetime elision for ordinary `&self`, `&str`, `&[T]`, and `&Path` APIs.
+- Return borrowed data from simple accessors and iterators when the lifetime is obvious.
 - Return owned values when borrowing would expose internal structure or require named lifetimes.
 - Clone at API boundaries when it keeps signatures simple.
 - Use lifetime-bearing structs only for real borrowed views into another value.
@@ -23,7 +24,8 @@ Most application APIs are easier to call and refactor when they own their return
 
 - Do not introduce lifetime parameters only to avoid a cheap allocation.
 - Do not store references in long-lived application structs by default.
-- Do not return references to internal collections when an owned snapshot is simpler.
+- Do not return owned snapshots from bare-noun accessors; name the ownership.
+- Do not return references from computed queries when an owned snapshot is simpler.
 - Do not use self-referential structs in ordinary code.
 - Do not add named lifetimes where elision communicates the relationship.
 - Do not make public APIs lifetime-heavy unless borrowing is the point of the abstraction.
@@ -98,5 +100,4 @@ pub fn owned_tokens(input: &str) -> Vec<String> {
 
 - Use explicit lifetimes for borrowed views, parsers, iterators, and APIs where zero-copy behavior is the main value.
 - Use lifetime-bearing structs for short-lived adapters that cannot outlive their source.
-- Return borrowed data from simple accessors and iterators when the lifetime is obvious.
 - Accept more lifetime complexity in measured hot paths where allocation cost is known to matter.
