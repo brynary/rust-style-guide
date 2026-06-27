@@ -6,67 +6,67 @@ Topic pages should use short, directive rules. Do not load every topic page by d
 
 ## Foundations
 
-- House style and Rust philosophy
-- Library vs application conventions
-- Rust edition and MSRV
+- [House style and Rust philosophy](house-style-and-rust-philosophy.md)
+- [Library vs application conventions](library-vs-application-conventions.md)
+- [Rust edition and MSRV](rust-edition-and-msrv.md)
 
 ## Tooling and Project Shape
 
-- rustfmt and formatting
-- rustc and Clippy lints
-- Cargo, workspaces, features, and dependencies
-- Modules, visibility, and re-exports
-- Naming, imports, and prelude policy
-- Documentation and rustdoc examples
+- [rustfmt and formatting](rustfmt-and-formatting.md)
+- [rustc and Clippy lints](rustc-and-clippy-lints.md)
+- [Cargo, workspaces, features, and dependencies](cargo-workspaces-features-and-dependencies.md)
+- [Modules, visibility, and re-exports](modules-visibility-and-re-exports.md)
+- [Naming, imports, and prelude policy](naming-imports-and-prelude-policy.md)
+- [Documentation and rustdoc examples](documentation-and-rustdoc-examples.md)
 
 ## Type and API Design
 
-- Struct design and encapsulation
-- Constructors and builders
-- Newtype pattern and semantic wrappers
-- Enums vs traits vs generics vs trait objects
-- Trait design
-- Deriving and common trait implementations
-- Conversions, getters, and method naming
-- Typestate and state machines
-- Public API evolution
+- [Struct design and encapsulation](struct-design-and-encapsulation.md)
+- [Constructors and builders](constructors-and-builders.md)
+- [Newtype pattern and semantic wrappers](newtype-pattern-and-semantic-wrappers.md)
+- [Enums vs traits vs generics vs trait objects](enums-vs-traits-vs-generics-vs-trait-objects.md)
+- [Trait design](trait-design.md)
+- [Deriving and common trait implementations](deriving-and-common-trait-implementations.md)
+- [Conversions, getters, and method naming](conversions-getters-and-method-naming.md)
+- [Typestate and state machines](typestate-and-state-machines.md)
+- [Public API evolution](public-api-evolution.md)
 
 ## Ownership and Data Flow
 
-- Ownership, borrowing, and clone policy
-- Strings, slices, and flexible parameters
-- Lifetimes
-- Smart pointers and interior mutability
-- Collections and data structures
+- [Ownership, borrowing, and clone policy](ownership-borrowing-and-clone-policy.md)
+- [Strings, slices, and flexible parameters](strings-slices-and-flexible-parameters.md)
+- [Lifetimes](lifetimes.md)
+- [Smart pointers and interior mutability](smart-pointers-and-interior-mutability.md)
+- [Collections and data structures](collections-and-data-structures.md)
 
 ## Errors, Safety, and Diagnostics
 
-- Error taxonomy and layer boundaries
-- Library errors vs application errors
-- Error propagation, context, and messages
-- Panics, `unwrap`, `expect`, and assertions
-- Validation and invariants
-- Logging and observability
+- [Error taxonomy and layer boundaries](error-taxonomy-and-layer-boundaries.md)
+- [Library errors vs application errors](library-errors-vs-application-errors.md)
+- [Error propagation, context, and messages](error-propagation-context-and-messages.md)
+- [Panics, unwrap, expect, and assertions](panics-unwrap-expect-and-assertions.md)
+- [Validation and invariants](validation-and-invariants.md)
+- [Logging and observability](logging-and-observability.md)
 
 ## Async and Concurrency
 
-- Async runtime and when to use async
-- Async API design and task lifecycle
-- Cancellation, shutdown, and blocking work
-- Concurrency primitives
+- [Async runtime and when to use async](async-runtime-and-when-to-use-async.md)
+- [Async API design and task lifecycle](async-api-design-and-task-lifecycle.md)
+- [Cancellation, shutdown, and blocking work](cancellation-shutdown-and-blocking-work.md)
+- [Concurrency primitives](concurrency-primitives.md)
 
 ## Everyday Implementation
 
-- Control flow
-- Option and Result idioms
-- Iterators, closures, and loops
-- Mutation style
+- [Control flow](control-flow.md)
+- [Option and Result idioms](option-and-result-idioms.md)
+- [Iterators, closures, and loops](iterators-closures-and-loops.md)
+- [Mutation style](mutation-style.md)
 
 ## Testing and Release
 
-- Testing and doctests
-- Property tests, snapshots, benchmarks, and CI
-- Unsafe code and macros
+- [Testing and doctests](testing-and-doctests.md)
+- [Property tests, snapshots, benchmarks, and CI](property-tests-snapshots-benchmarks-and-ci.md)
+- [Unsafe code and macros](unsafe-code-and-macros.md)
 
 ## Routing Notes
 

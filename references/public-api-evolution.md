@@ -1,0 +1,72 @@
+# Public API Evolution
+
+## Rule
+
+Treat public API evolution as mostly relevant only for published crates or APIs consumed outside the repo; optimize internal application APIs for simplicity and accept coordinated breaking changes.
+
+## Why
+
+Most application code is changed with its callers. Semver ceremony, compatibility shims, sealed traits, and future-proof annotations add noise when the API is not externally consumed. Published library APIs are different: callers update independently, so compatibility becomes part of the contract.
+
+## Do
+
+- First classify the API as internal application code, shared in-repo workspace code, or externally consumed/published library code.
+- Prefer simple current APIs for application and in-repo code.
+- Accept breaking changes for internal APIs when the callers can be updated in the same change.
+- Use `pub(crate)` for internal boundaries that should not become crate API.
+- Keep fields private by default when the type has invariants.
+- Use public fields for plain DTOs, snapshots, and records with no invariants.
+- Keep published public APIs small and deliberate.
+- For published crates, follow semver, use private fields, and consider `#[non_exhaustive]` where future fields or variants are likely.
+- Seal public traits only when external implementations are not intended and the trait is part of a published API.
+
+## Avoid
+
+- Do not add semver compatibility shims for purely internal application code.
+- Do not use `#[non_exhaustive]` in internal code just to future-proof ordinary enums or structs.
+- Do not create broad public facades for modules that are only used inside one application.
+- Do not expose public fields on invariant-bearing types.
+- Do not leak dependency types through published public APIs unless that dependency is intentionally part of the contract.
+- Do not remove or change published public APIs without treating it as a breaking change.
+- Do not make public traits open for external implementations unless that extension point is intentional.
+
+## Library vs Application
+
+Applications and internal workspace crates may optimize for directness. Refactor call sites together, delete stale APIs, and avoid compatibility layers that no outside caller needs.
+
+Published crates and externally consumed APIs should optimize for compatibility. Keep the public surface narrow, document behavior, and use semver-aware tools such as `#[non_exhaustive]`, deprecation periods, and sealed traits when they solve a real evolution problem.
+
+## Example
+
+```rust
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub(crate) struct RunSnapshot {
+    pub id:     RunId,
+    pub status: RunStatus,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum RunStatus {
+    Queued,
+    Running,
+    Succeeded,
+    Failed,
+}
+
+#[non_exhaustive]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum ClientError {
+    Timeout,
+    Unauthorized,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct RunId(u64);
+```
+
+## Exceptions
+
+- Treat an internal API as external when another team, service, plugin, or generated client consumes it independently.
+- Use conservative semver rules when publishing to crates.io or documenting a stable SDK surface.
+- Keep temporary compatibility shims when a multi-step migration cannot update all callers in one change.
+- Use `#[non_exhaustive]` internally only when it materially improves match-site clarity during active development.

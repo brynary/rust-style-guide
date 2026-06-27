@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Style Guide"
+  short_description: "Project Rust style conventions"
+  default_prompt: "Use $rust-style-guide to apply project Rust conventions to my changes."

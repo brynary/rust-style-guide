@@ -40,7 +40,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 4. **rustfmt and Formatting**
    - Prefer rustfmt defaults, define formatting exceptions, and keep CI/editor behavior aligned.
-   - Decision points: custom format settings vs defaults.
+   - Decision points: D26.
 
 5. **rustc and Clippy Lints**
    - Define lint baseline, deny/warn policy, local overrides, and generated-code expectations.
@@ -48,7 +48,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 6. **Cargo, Workspaces, Features, and Dependencies**
    - Cover workspace layout, additive feature flags, dependency hygiene, public dependency leakage, profiles, and metadata.
-   - Decision points: dependency conservatism, feature defaults, MSRV impact.
+   - Decision points: D27, D28, D29.
 
 7. **Modules, Visibility, and Re-exports**
    - Cover `mod`, file layout, `pub`, `pub(crate)`, `pub(super)`, facades, and public API shape.
@@ -56,11 +56,11 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 8. **Naming, Imports, and Prelude Policy**
    - Cover casing, acronym style, import style, getter names, and when a prelude is justified.
-   - Decision points: D15.
+   - Decision points: D15, D30, D31, D32.
 
 9. **Documentation and Rustdoc Examples**
    - Cover summary lines, `//!`, `///`, `Errors`, `Panics`, `Safety`, examples, and doctest style.
-   - Decision points: doc every public item vs only non-obvious items; unwrap in examples.
+   - Decision points: D33, D34.
 
 ### Type and API Design
 
@@ -82,7 +82,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 14. **Trait Design**
     - Cover small traits, associated types, bounds, blanket impls, sealed traits, object safety, and trait contracts.
-    - Decision points: D7, trait granularity, sealed traits.
+    - Decision points: D7, D35.
 
 15. **Deriving and Common Trait Implementations**
     - Cover `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, `Hash`, `Ord`, `Default`, `Display`, and manual impls.
@@ -90,43 +90,43 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 16. **Conversions, Getters, and Method Naming**
     - Cover `From`, `TryFrom`, `AsRef`, `Borrow`, `Deref`, `as_`, `to_`, `into_`, and getter naming.
-    - Decision points: D11, whether to expose getters for every field.
+    - Decision points: D10, D11, D32.
 
 17. **Typestate and State Machines**
     - Cover data-bearing enums, `PhantomData`, compile-time state, and when typestate is too much.
-    - Decision points: D13, type-level vs runtime validation.
+    - Decision points: D13, D36.
 
 18. **Public API Evolution**
     - Cover semver, `#[non_exhaustive]`, `#[must_use]`, sealed traits, public fields, and public dependencies.
-    - Decision points: D14, D15, public API strictness.
+    - Decision points: D14, D15, D37.
 
 ### Ownership and Data Flow
 
 19. **Ownership, Borrowing, and Clone Policy**
     - Cover `self`, `&self`, `&mut self`, owned returns, internal clones, and `Rc::clone`/`Arc::clone` style.
-    - Decision points: D10.
+    - Decision points: D10, D38.
 
 20. **Strings, Slices, and Flexible Parameters**
     - Cover `String`, `&str`, `Path`, `&Path`, slices, `IntoIterator`, `AsRef`, `Into`, and `Cow`.
-    - Decision points: D11.
+    - Decision points: D10, D11.
 
 21. **Lifetimes**
     - Cover lifetime elision, naming lifetimes, lifetime-bearing structs, and avoiding gratuitous annotations.
-    - Decision points: how much API complexity to accept for avoiding allocation.
+    - Decision points: D10, D39.
 
 22. **Smart Pointers and Interior Mutability**
     - Cover `Box`, `Rc`, `Arc`, `Cell`, `RefCell`, `Mutex`, `RwLock`, `OnceLock`, and `LazyLock`.
-    - Decision points: D18, when interior mutability is acceptable.
+    - Decision points: D18.
 
 23. **Collections and Data Structures**
     - Cover `Vec`, `VecDeque`, maps, sets, deterministic ordering, capacity hints, and small collection crates.
-    - Decision points: dependency threshold for specialized collections.
+    - Decision points: D40.
 
 ### Errors, Safety, and Diagnostics
 
 24. **Error Taxonomy and Layer Boundaries**
     - Cover domain errors, infrastructure errors, programming errors, conversion between layers, and avoiding error leakage.
-    - Decision points: granularity of error enums and context boundaries.
+    - Decision points: D41.
 
 25. **Library Errors vs Application Errors**
     - Cover `thiserror`, `anyhow`, `eyre`, `miette`, hand-written errors, and public error stability.
@@ -134,7 +134,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 26. **Error Propagation, Context, and Messages**
     - Cover `?`, `From`, `#[from]`, `.context()`, `Display`, source chains, and message style.
-    - Decision points: sparse vs rich context.
+    - Decision points: D42.
 
 27. **Panics, `unwrap`, `expect`, and Assertions**
     - Cover `panic!`, `unwrap`, `expect`, `assert!`, `debug_assert!`, `unreachable!`, `todo!`, and tests.
@@ -142,17 +142,17 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 28. **Validation and Invariants**
     - Cover fallible constructors, boundary validation, parse-don't-validate, newtypes, and fail-fast startup checks.
-    - Decision points: type-level vs runtime validation.
+    - Decision points: D43.
 
 29. **Logging and Observability**
     - Cover `tracing`, `log`, spans, fields, levels, backtraces, PII/secrets, and OpenTelemetry hooks.
-    - Decision points: D19.
+    - Decision points: D19, D44.
 
 ### Async and Concurrency
 
 30. **Async Runtime and When to Use Async**
     - Cover Tokio-first vs runtime-agnostic design, sync alternatives, and library/runtime boundaries.
-    - Decision points: D16.
+    - Decision points: D16, D45.
 
 31. **Async API Design and Task Lifecycle**
     - Cover async traits, `Send` bounds, `JoinHandle`, spawning, ownership, task naming, and task cleanup.
@@ -160,21 +160,21 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 
 32. **Cancellation, Shutdown, and Blocking Work**
     - Cover cancellation safety, graceful shutdown, `select!`, timeouts, `spawn_blocking`, and CPU-bound work.
-    - Decision points: D17.
+    - Decision points: D46.
 
 33. **Concurrency Primitives**
     - Cover threads, channels, `Arc<Mutex<T>>`, `RwLock`, lock ordering, tokio vs std sync types, and `rayon`.
-    - Decision points: D18.
+    - Decision points: D18, D47.
 
 ### Everyday Implementation
 
 34. **Control Flow**
     - Cover `match`, `if let`, `while let`, `let else`, early returns, match guards, and exhaustiveness.
-    - Decision points: exhaustive clarity vs concise happy-path code.
+    - Decision points: D48.
 
 35. **Option and Result Idioms**
     - Cover `Option`, `Result`, `ok_or`, `map`, `and_then`, `unwrap_or_else`, and using `?` on both types.
-    - Decision points: combinators vs explicit control flow.
+    - Decision points: D49.
 
 36. **Iterators, Closures, and Loops**
     - Cover iterator chains, `collect`, `fold`, `try_fold`, closure capture, and when loops are clearer.

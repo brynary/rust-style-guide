@@ -1,19 +1,21 @@
 # Rust Style Guide Skill
 
-This repository is preparing a Rust style guide that can be packaged as a skill for AI coding agents. The goal is to give agents concrete, opinionated defaults for writing idiomatic Rust in the project owner's preferred style.
+This repository contains a Rust style guide that can be packaged as a skill for AI coding agents. The goal is to give agents concrete, opinionated defaults for writing idiomatic Rust in the project owner's preferred style.
 
-This is not the finished style guide yet. The current repository maps the terrain, identifies decisions to resolve, and defines the drafting format.
+The current packaged skill shape is `SKILL.md`, `agents/openai.yaml`, and focused topic pages under `references/`. Planning files remain in the repo as source material, but ordinary skill use should load only the router and relevant references.
 
 ## Start Here
 
-- [OUTLINE.md](OUTLINE.md): the 40-topic map for the planned guide.
-- [DECISIONS.md](DECISIONS.md): style decisions to resolve before drafting final topic pages.
+- [SKILL.md](SKILL.md): root skill router for progressive disclosure.
+- [agents/openai.yaml](agents/openai.yaml): UI metadata for the packaged skill.
+- [references/topics.md](references/topics.md): topic index for the packaged skill.
+- [references/](references): focused Rust style policy pages.
+- [OUTLINE.md](OUTLINE.md): the 40-topic map used to draft the guide.
+- [DECISIONS.md](DECISIONS.md): resolved style decision register.
 - [DRAFTING.md](DRAFTING.md): drafting order, page rules, and scope rules.
 - [TEMPLATE.md](TEMPLATE.md): the required format for each topic page.
-- [samples/](samples): sample topic pages in the intended format.
+- [samples/](samples): sample pages used as format references.
 - [AGENTS.md](AGENTS.md): repository instructions for AI coding agents.
-- [SKILL.md](SKILL.md): draft root skill file using a progressive-disclosure router.
-- [references/topics.md](references/topics.md): draft topic index for the packaged skill.
 
 ## Research
 
@@ -31,17 +33,18 @@ The guide should be Rust-idiomatic with an OO-leaning default:
 
 ## Workflow
 
-1. Resolve the decision register in [DECISIONS.md](DECISIONS.md).
-2. Draft topic pages using [TEMPLATE.md](TEMPLATE.md).
-3. Follow the drafting order in [DRAFTING.md](DRAFTING.md).
-4. Use the sample pages as format references.
-5. Package the final topic pages as an AI-agent skill.
+1. Update [DECISIONS.md](DECISIONS.md) when policy changes.
+2. Update the relevant page under [references/](references).
+3. Keep [references/topics.md](references/topics.md) linked to every packaged reference page.
+4. Keep [SKILL.md](SKILL.md) small and route through progressive disclosure.
+5. Use [DRAFTING.md](DRAFTING.md) and [TEMPLATE.md](TEMPLATE.md) only when adding or reshaping pages.
 
 ## Packaging Model
 
-The final skill should use progressive disclosure:
+The skill uses progressive disclosure:
 
 - `SKILL.md` stays small and routes tasks to relevant references.
+- `agents/openai.yaml` provides user-facing skill metadata.
 - `references/topics.md` indexes the available topic pages.
 - Focused topic pages live under `references/`.
 - Planning files like `README.md`, `OUTLINE.md`, `DRAFTING.md`, `DECISIONS.md`, and `.ai/research/` stay outside the packaged skill unless explicitly needed.
