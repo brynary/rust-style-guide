@@ -38,7 +38,8 @@ The guide should be Rust-idiomatic with an OO-leaning default:
 2. Update the relevant page under [guidelines/](guidelines) or [workflows/](workflows).
 3. Keep [guidelines.md](guidelines.md) linked to every packaged guideline page.
 4. Keep [SKILL.md](SKILL.md) small and route through progressive disclosure.
-5. Use [DRAFTING.md](DRAFTING.md) and [TEMPLATE.md](TEMPLATE.md) only when adding or reshaping pages.
+5. Run `bash checks/check.sh` before committing skill changes.
+6. Use [DRAFTING.md](DRAFTING.md) and [TEMPLATE.md](TEMPLATE.md) only when adding or reshaping pages.
 
 ## Packaging Model
 
