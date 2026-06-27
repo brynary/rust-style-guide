@@ -14,6 +14,7 @@ Structured traces make logs searchable, aggregatable, and useful after the fact.
 - Add spans around meaningful operations such as requests, jobs, commands, tasks, external calls, and workflow steps.
 - Attach structured fields for IDs, names, states, attempts, counts, durations, and safe error summaries.
 - Use fixed message strings; put variable data in fields.
+- Write log messages in lowercase with no trailing period, matching the style of error `Display` and `anyhow` context messages.
 - Keep INFO low-volume and high-signal: startup, shutdown, operation start/end, and key outcomes.
 - Use DEBUG for investigation detail: branches taken, retries, resolved config, request metadata, and intermediate state.
 - Use WARN for degraded behavior or retryable unexpected conditions.
@@ -46,18 +47,18 @@ pub async fn sync_account(account_id: AccountId, client: &BillingClient) -> Resu
     let span = tracing::info_span!("sync_account", account_id = %account_id);
 
     async move {
-        info!("Starting account sync");
+        info!("starting account sync");
 
         let invoices = client
             .list_invoices(account_id)
             .await
             .map_err(SyncError::ListInvoices)?;
 
-        debug!(invoice_count = invoices.len(), "Listed invoices");
+        debug!(invoice_count = invoices.len(), "listed invoices");
 
         for invoice in invoices {
             if invoice.is_stale() {
-                warn!(invoice_id = %invoice.id(), "Skipping stale invoice");
+                warn!(invoice_id = %invoice.id(), "skipping stale invoice");
                 continue;
             }
 
@@ -67,7 +68,7 @@ pub async fn sync_account(account_id: AccountId, client: &BillingClient) -> Resu
                 .map_err(SyncError::SyncInvoice)?;
         }
 
-        info!("Account sync complete");
+        info!("account sync complete");
         Ok(())
     }
     .instrument(span)
@@ -75,20 +76,20 @@ pub async fn sync_account(account_id: AccountId, client: &BillingClient) -> Resu
 }
 
 pub fn log_sync_failure(account_id: AccountId, error: &SyncError) {
-    error!(account_id = %account_id, error = %error, "Account sync failed");
+    error!(account_id = %account_id, error = %error, "account sync failed");
 }
 ```
 
 Prefer this shape over interpolated messages:
 
 ```rust
-info!(account_id = %account_id, invoice_count = count, "Account sync complete");
+info!(account_id = %account_id, invoice_count = count, "account sync complete");
 ```
 
 Avoid:
 
 ```rust
-info!("Account {account_id} sync complete with {count} invoices");
+info!("account {account_id} sync complete with {count} invoices");
 ```
 
 ## Exceptions

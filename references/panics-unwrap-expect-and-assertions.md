@@ -22,6 +22,7 @@ Panics abort the current task instead of giving callers a recovery path. They ar
 ## Avoid
 
 - Do not use `unwrap` or `expect` for recoverable runtime failures.
+- Do not use bare `unwrap` outside tests; the workspace denies `clippy::unwrap_used` (with `allow-unwrap-in-tests`), so use `expect` with an invariant message in production code.
 - Do not use panics for normal validation failures.
 - Do not write `expect("should work")`, `expect("failed")`, or messages that just repeat the error.
 - Do not use `unreachable!` for states reachable from external input.

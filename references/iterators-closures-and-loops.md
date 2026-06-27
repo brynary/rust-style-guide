@@ -77,9 +77,11 @@ Use `try_fold` only when fallible accumulation stays compact:
 
 ```rust
 pub fn total_size(files: &[FileEntry]) -> Result<u64, Error> {
-    files
-        .iter()
-        .try_fold(0_u64, |total, file| Ok(total + file.size()?))
+    files.iter().try_fold(0_u64, |total, file| {
+        total
+            .checked_add(file.size()?)
+            .ok_or(Error::SizeOverflow)
+    })
 }
 ```
 

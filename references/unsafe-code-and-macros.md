@@ -55,21 +55,27 @@ Keep the default lint strict:
 unsafe_code = "deny"
 ```
 
-Use a macro when it removes repeated, mechanical boilerplate:
+Use a macro when it removes repeated, mechanical boilerplate that ordinary functions and traits cannot. This macro fits opaque, server-assigned IDs that are always valid by construction and share an identical, validation-free shape. IDs that need validation, a custom `Display`, or distinct behavior should be written by hand following the newtype guidance.
 
 ```rust
 macro_rules! define_id_type {
     ($name:ident) => {
-        #[derive(Clone, Debug, Eq, Hash, PartialEq)]
+        #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
         pub struct $name(String);
 
         impl $name {
-            pub fn new(value: String) -> Self {
-                Self(value)
+            pub fn new(value: impl Into<String>) -> Self {
+                Self(value.into())
             }
 
             pub fn as_str(&self) -> &str {
                 &self.0
+            }
+        }
+
+        impl std::fmt::Display for $name {
+            fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                formatter.write_str(&self.0)
             }
         }
     };
@@ -80,7 +86,7 @@ define_id_type!(WorkspaceId);
 define_id_type!(RunId);
 ```
 
-If the macro stops being simpler than the expanded code, delete it and write the types directly.
+The macro earns its place only because every generated type is identical and correct on its own. If one ID needs validation or different behavior, or if the macro stops being simpler than the expanded code, delete it and write the types directly.
 
 ## Exceptions
 

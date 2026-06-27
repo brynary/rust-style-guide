@@ -18,6 +18,7 @@ Most application code is changed with its callers. Semver ceremony, compatibilit
 - Use public fields for plain DTOs, snapshots, and records with no invariants.
 - Keep published public APIs small and deliberate.
 - For published crates, follow semver, use private fields, and consider `#[non_exhaustive]` where future fields or variants are likely.
+- Add `#[must_use]` to types and methods where silently dropping the value is almost always a bug: builders, RAII guards, and task/owner types that must be shut down or joined.
 - Seal public traits only when external implementations are not intended and the trait is part of a published API.
 
 ## Avoid
@@ -29,12 +30,31 @@ Most application code is changed with its callers. Semver ceremony, compatibilit
 - Do not leak dependency types through published public APIs unless that dependency is intentionally part of the contract.
 - Do not remove or change published public APIs without treating it as a breaking change.
 - Do not make public traits open for external implementations unless that extension point is intentional.
+- Do not rely on the noisy `clippy::must_use_candidate` lint to find must-use types; apply `#[must_use]` deliberately where dropping the value is a real mistake.
 
 ## Library vs Application
 
 Applications and internal workspace crates may optimize for directness. Refactor call sites together, delete stale APIs, and avoid compatibility layers that no outside caller needs.
 
 Published crates and externally consumed APIs should optimize for compatibility. Keep the public surface narrow, document behavior, and use semver-aware tools such as `#[non_exhaustive]`, deprecation periods, and sealed traits when they solve a real evolution problem.
+
+## Must-Use Types
+
+Mark types and methods with `#[must_use]` when ignoring the returned value is almost always a mistake. This turns a silent bug into a compile-time warning at the call site.
+
+- Use it on builders, RAII guards, and async task owners such as a `Poller` or `WorkerSet` that callers must shut down or join.
+- Use it on pure methods whose only purpose is to return a value.
+- `Result` and `Option` are already `#[must_use]`, so the value comes from your own types.
+- Apply it deliberately rather than enabling `clippy::must_use_candidate`, which is noisy.
+
+```rust
+/// Owns a background task. Dropping it without calling `shutdown` leaks the task.
+#[must_use = "call `shutdown` to stop and join the task"]
+pub struct Poller {
+    shutdown: CancellationToken,
+    task:     JoinHandle<Result<(), PollerError>>,
+}
+```
 
 ## Example
 
