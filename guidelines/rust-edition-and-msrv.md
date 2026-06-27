@@ -2,7 +2,7 @@
 
 ## Rule
 
-Use Rust 2024 for new crates and declare `rust-version` in every package; default new Rust 2024 crates to `rust-version = "1.85"` unless project constraints require otherwise.
+Use Rust 2024 for new code and declare `rust-version` in every package; default Rust 2024 crates to `rust-version = "1.85"` unless project constraints require otherwise.
 
 ## Why
 
@@ -10,8 +10,8 @@ The edition controls language compatibility, and `rust-version` tells Cargo and 
 
 ## Do
 
-- Set `edition = "2024"` for new crates.
-- Set `rust-version = "1.85"` for new Rust 2024 crates unless the project has a higher or lower documented MSRV.
+- Set `edition = "2024"` for Rust 2024 crates.
+- Set `rust-version = "1.85"` for Rust 2024 crates unless the project has a higher or lower documented MSRV.
 - Keep workspace member editions and MSRVs consistent unless a crate has a specific reason to differ.
 - Treat MSRV bumps in reusable libraries as public compatibility changes.
 - Check library changes against the declared MSRV, not only the local stable compiler.
@@ -34,6 +34,8 @@ Applications and internal services may track stable Rust more aggressively, but 
 
 ## Example
 
+Package-level policy:
+
 ```toml
 [package]
 name = "example-crate"
@@ -42,12 +44,14 @@ edition = "2024"
 rust-version = "1.85"
 ```
 
-When changing code in a reusable library, verify the declared MSRV explicitly:
+When changing a reusable library, verify the declared MSRV explicitly:
 
 ```sh
 rustup toolchain install 1.85.0
 cargo +1.85.0 check --workspace --all-targets
 ```
+
+Use the new project workflow for initial workspace setup.
 
 ## Exceptions
 

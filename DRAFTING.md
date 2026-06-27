@@ -1,14 +1,15 @@
 # Drafting Instructions
 
-Use these instructions when turning the outline into topic pages.
+Use these instructions when turning the outline into guideline pages.
 
 ## Priorities
 
 1. Resolve the decision register in [DECISIONS.md](DECISIONS.md).
-2. Keep [SKILL.md](SKILL.md) small and use it as a router.
-3. Draft the core pages first: errors, panics, type/API design, ownership, async, logging, linting, and testing.
-4. Add advanced pages only where the target codebase needs them.
-5. Keep every page mechanical enough for an agent to follow.
+2. Keep [SKILL.md](SKILL.md) and [root.md](root.md) small and use them as routers.
+3. Draft the core guideline pages first: errors, panics, type/API design, ownership, async, logging, linting, and testing.
+4. Add workflow pages only where repeated task procedures need more than policy.
+5. Add advanced guideline pages only where the target codebase needs them.
+6. Keep every page mechanical enough for an agent to follow.
 
 ## Drafting Order
 
@@ -23,7 +24,7 @@ Use these instructions when turning the outline into topic pages.
 
 ## Page Rules
 
-- Use [TEMPLATE.md](TEMPLATE.md) for every topic page.
+- Use [TEMPLATE.md](TEMPLATE.md) for every guideline page.
 - Make the `Rule` section a direct default, not a discussion.
 - Keep `Why` short and practical.
 - Prefer concrete guidance over philosophy.
@@ -33,17 +34,18 @@ Use these instructions when turning the outline into topic pages.
 
 ## Progressive Disclosure
 
-- Treat [SKILL.md](SKILL.md) as the root router, not the guide itself.
-- Keep detailed rules in `references/` topic pages.
-- Keep [references/topics.md](references/topics.md) as the one-page topic index.
-- Link reference files directly from [SKILL.md](SKILL.md) or [references/topics.md](references/topics.md); avoid deep reference chains.
-- Do not load every topic page for ordinary tasks.
+- Treat [SKILL.md](SKILL.md) as the Codex entrypoint and [root.md](root.md) as the root router, not the guide itself.
+- Keep detailed policy in `guidelines/` pages.
+- Keep procedural task flows in `workflows/` pages.
+- Keep [guidelines.md](guidelines.md) as the one-page guideline index.
+- Link guideline and workflow files directly from [root.md](root.md), [guidelines.md](guidelines.md), or [SKILL.md](SKILL.md); avoid deep reference chains.
+- Do not load every guideline page for ordinary tasks.
 - Use routing examples for common task types so agents know which pages to load.
 
 ## Scope Rules
 
 - Do not re-teach Rust syntax or ownership basics unless a style choice depends on them.
-- Do not include long surveys of ecosystem options on topic pages.
+- Do not include long surveys of ecosystem options on guideline pages.
 - Do not add advanced topics unless they affect likely agent output.
 - Keep library/application differences explicit when the right answer changes by context.
 - Treat public API guidance as stricter than internal application guidance.

@@ -27,41 +27,14 @@ Formatting should be mechanical and reproducible. A pinned rustfmt version preve
 
 ## Example
 
-Use this `rustfmt.toml`:
-
-```toml
-edition = "2024"
-style_edition = "2024"
-
-# Width
-max_width = 100
-comment_width = 80
-
-# Imports
-group_imports = "StdExternalCrate"
-imports_granularity = "Module"
-
-# Formatting
-use_field_init_shorthand = true
-merge_derives = true
-overflow_delimited_expr = true
-format_code_in_doc_comments = true
-format_macro_matchers = true
-normalize_doc_attributes = true
-wrap_comments = true
-
-# Alignment
-struct_field_align_threshold = 20
-enum_discrim_align_threshold = 20
-```
-
-Install and run the pinned formatter:
+Run the checked-in formatter configuration:
 
 ```sh
-rustup toolchain install nightly-2026-04-14 --profile minimal --component rustfmt
 cargo +nightly-2026-04-14 fmt --all
 cargo +nightly-2026-04-14 fmt --check --all
 ```
+
+Use the new project workflow for the initial `rustfmt.toml` contents.
 
 ## Exceptions
 

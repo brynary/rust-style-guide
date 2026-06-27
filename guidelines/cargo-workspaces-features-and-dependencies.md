@@ -36,24 +36,7 @@ For libraries, treat public dependency exposure and MSRV bumps as compatibility 
 
 ## Example
 
-Workspace policy:
-
-```toml
-[workspace]
-members = ["crates/*"]
-resolver = "2"
-
-[workspace.package]
-edition = "2024"
-rust-version = "1.85"
-
-[workspace.dependencies]
-anyhow = "1"
-serde = { version = "1", features = ["derive"] }
-thiserror = "2"
-tokio = { version = "1", features = ["full"] }
-tracing = "0.1"
-```
+Use the new project workflow for initial workspace scaffolding. This page covers how to keep Cargo configuration simple after the project exists.
 
 Library with additive optional integration:
 

@@ -1,0 +1,168 @@
+# New Rust Project
+
+Use this workflow when creating or configuring a new Rust crate, workspace, CLI, library, service, or application.
+
+## Required Guidelines
+
+Load [guidelines.md](../guidelines.md), then load these guideline pages as needed:
+
+- [House style and Rust philosophy](../guidelines/house-style-and-rust-philosophy.md)
+- [Library vs application conventions](../guidelines/library-vs-application-conventions.md)
+- [Rust edition and MSRV](../guidelines/rust-edition-and-msrv.md)
+- [rustfmt and formatting](../guidelines/rustfmt-and-formatting.md)
+- [rustc and Clippy lints](../guidelines/rustc-and-clippy-lints.md)
+- [Cargo, workspaces, features, and dependencies](../guidelines/cargo-workspaces-features-and-dependencies.md)
+- [Testing and doctests](../guidelines/testing-and-doctests.md)
+- [Property tests, snapshots, benchmarks, and CI](../guidelines/property-tests-snapshots-benchmarks-and-ci.md)
+- [Unsafe code and macros](../guidelines/unsafe-code-and-macros.md)
+
+Also load async, logging, public API, and error guidelines when the project is an async service, reusable library, or CLI/application with diagnostics.
+
+## Workflow
+
+1. Identify the project shape: library, application, CLI, service, test support crate, or mixed workspace.
+2. Make the sync-vs-async posture explicit before adding async dependencies: sync-first, Tokio-first, or mixed.
+3. Prefer a workspace when multiple crates share version, edition, dependencies, lints, or profiles.
+4. Set Rust 2024 and `rust-version = "1.85"` unless the project already has different constraints.
+5. Add pinned rustfmt configuration and use `nightly-2026-04-14` for formatting.
+6. Add curated workspace lints and tailor project-specific `clippy.toml` guardrails before copying async/blocking disallow rules.
+7. Use `cargo nextest run` as the normal test runner.
+8. Skip doctests by default; run `cargo test --doc` only when the project explicitly opts into maintaining rustdoc examples.
+9. Add dependencies only when they remove real complexity or provide mature domain behavior.
+10. Verify the project with the configured commands before handing it off.
+
+## Cargo Baseline
+
+Use a workspace shape when the project is likely to grow beyond one crate:
+
+```toml
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.85"
+
+[workspace.dependencies]
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -2 }
+allow_attributes_without_reason = "warn"
+
+implicit_hasher = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+similar_names = "allow"
+struct_excessive_bools = "allow"
+too_many_arguments = "allow"
+too_many_lines = "allow"
+cast_precision_loss = "allow"
+doc_markdown = "allow"
+
+print_stdout = "warn"
+print_stderr = "warn"
+dbg_macro = "warn"
+empty_drop = "warn"
+empty_structs_with_brackets = "warn"
+disallowed_methods = "deny"
+exit = "warn"
+get_unwrap = "warn"
+unwrap_used = "deny"
+rc_buffer = "warn"
+rc_mutex = "warn"
+rest_pat_in_fully_bound_structs = "warn"
+use_self = "warn"
+wildcard_imports = "warn"
+absolute_paths = "warn"
+```
+
+For a single crate, put the same package fields and lint tables in the crate's `Cargo.toml` instead of a workspace root.
+
+## rustfmt Baseline
+
+Use this `rustfmt.toml` at the project root:
+
+```toml
+edition = "2024"
+style_edition = "2024"
+
+max_width = 100
+comment_width = 80
+
+group_imports = "StdExternalCrate"
+imports_granularity = "Module"
+
+use_field_init_shorthand = true
+merge_derives = true
+overflow_delimited_expr = true
+format_code_in_doc_comments = true
+format_macro_matchers = true
+normalize_doc_attributes = true
+wrap_comments = true
+
+struct_field_align_threshold = 20
+enum_discrim_align_threshold = 20
+```
+
+Install the pinned formatter:
+
+```sh
+rustup toolchain install nightly-2026-04-14 --profile minimal --component rustfmt
+```
+
+## Optional Clippy Guardrails
+
+Use `clippy.toml` for project-specific architectural guardrails. For Tokio-first projects, review rules like these before copying them:
+
+```toml
+allow-unwrap-in-tests = true
+allow-unwrap-types = ["std::sync::LockResult"]
+
+disallowed-methods = [
+  { path = "std::thread::sleep", reason = "Prefer tokio::time::sleep on Tokio paths; document intentional blocking sleeps with #[expect(clippy::disallowed_methods, reason = \"...\")]", replacement = "tokio::time::sleep" },
+  { path = "std::thread::spawn", reason = "Prefer Tokio task APIs on async paths; document intentional dedicated OS threads with #[expect(clippy::disallowed_methods, reason = \"...\")]" },
+  { path = "std::process::Command::new", reason = "Prefer tokio::process::Command on Tokio paths; document intentional synchronous subprocesses with #[expect(clippy::disallowed_methods, reason = \"...\")]" },
+]
+
+disallowed-types = [
+  { path = "std::io::Read", reason = "Blocking trait; prefer tokio::io::AsyncReadExt on Tokio paths. Document intentional sync I/O with #[expect(clippy::disallowed_types, reason = \"...\")]" },
+  { path = "std::net::TcpStream", reason = "Blocking socket; prefer tokio::net::TcpStream on Tokio paths. Document intentional sync networking with #[expect(clippy::disallowed_types, reason = \"...\")]" },
+]
+```
+
+## Verification Commands
+
+Use these commands as the default new-project validation set:
+
+```sh
+cargo +nightly-2026-04-14 fmt --check --all
+cargo clippy --locked --workspace --all-targets -- -D warnings
+cargo nextest run --workspace --all-targets
+cargo +1.85.0 check --workspace --all-targets
+```
+
+If the project intentionally maintains doctests, add:
+
+```sh
+cargo test --doc
+```
+
+## Avoid
+
+- Do not add async casually; document the project posture first.
+- Do not add every standard dependency to every project by default.
+- Do not copy Tokio-specific Clippy guardrails into sync-first projects without tailoring them.
+- Do not create broad preludes, public facades, or feature flags before the project needs them.
+- Do not lower `unsafe_code = "deny"` unless the new crate's purpose requires unsafe code.

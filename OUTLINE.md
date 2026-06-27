@@ -2,7 +2,7 @@
 
 This outline is for a Rust style guide packaged as an AI-agent skill. The skill should not teach all of Rust. It should give agents clear defaults, exceptions, and small examples for the decisions they face while writing code.
 
-Target size: about 40 topic pages. Each topic should fit on one focused markdown page.
+Target size: about 40 guideline pages plus a small number of workflow pages. Each guideline should fit on one focused markdown page.
 
 ## Drafting Instructions
 
@@ -10,17 +10,17 @@ Use [DRAFTING.md](DRAFTING.md) for drafting order, scope, and page-writing guida
 
 ## Page Template
 
-Use [TEMPLATE.md](TEMPLATE.md) for every topic page.
+Use [TEMPLATE.md](TEMPLATE.md) for every guideline page.
 
 ## Packaged Skill Shape
 
-The final skill should follow the progressive-disclosure pattern in [SKILL.md](SKILL.md) and [references/topics.md](references/topics.md): a small root router plus focused reference pages. Planning files and research reports should not be part of the packaged skill by default.
+The final skill should follow the progressive-disclosure pattern in [SKILL.md](SKILL.md), [root.md](root.md), and [guidelines.md](guidelines.md): a small root router, focused guideline pages, and task workflows under `workflows/`. Planning files and research reports should not be part of the packaged skill by default.
 
 ## Decision Register
 
 Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting final policy pages.
 
-## Topic Map
+## Guideline Map
 
 ### Foundations
 

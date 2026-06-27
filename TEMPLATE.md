@@ -1,9 +1,9 @@
-# Topic Page Template
+# Guideline Page Template
 
-Use this format for Rust style guide topic pages.
+Use this format for Rust style guide guideline pages.
 
 ```markdown
-# Topic Name
+# Guideline Name
 
 ## Rule
 
@@ -41,4 +41,4 @@ Optional sections:
 - `Safety Notes`
 - `Decision Points`
 
-Use `Activation` for conditional or advanced pages such as async, typestate, unsafe code, macros, and specialized tooling. It should say when to load the page and when not to.
+Use `Activation` for conditional or advanced guideline pages such as async, typestate, unsafe code, macros, and specialized tooling. It should say when to load the page and when not to.
