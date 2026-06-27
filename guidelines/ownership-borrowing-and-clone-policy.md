@@ -100,6 +100,26 @@ impl Client {
 }
 ```
 
+Bad: hide an owned clone behind a plain accessor.
+
+```rust
+pub fn labels(&self) -> Vec<String> {
+    self.labels.clone()
+}
+```
+
+Good: borrow by default and name owned snapshots explicitly.
+
+```rust
+pub fn labels(&self) -> &[String] {
+    &self.labels
+}
+
+pub fn labels_snapshot(&self) -> Vec<String> {
+    self.labels.clone()
+}
+```
+
 ## Exceptions
 
 - Accept owned values when the function consumes, stores, or forwards ownership without cloning.

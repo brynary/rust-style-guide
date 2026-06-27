@@ -38,6 +38,19 @@ In Tokio code, use `tokio::sync` primitives when waiting for the lock must not b
 
 Use standard-library locks for synchronous code and short non-async critical sections.
 
+## Pointer and Thread-Safety Table
+
+| Need | Prefer | Thread-safe use |
+| --- | --- | --- |
+| Single owner, heap allocation | `Box<T>` | Movable across threads when `T: Send` |
+| Single-thread shared ownership | `Rc<T>` | No; use only on one thread |
+| Cross-thread shared ownership | `Arc<T>` | Yes when `T: Send + Sync` |
+| Single-thread interior mutation | `Cell<T>` or `RefCell<T>` | No; use only on one thread |
+| Shared mutable state | `Mutex<T>` | Yes when `T: Send` and critical sections stay short |
+| Read-heavy shared state | `RwLock<T>` | Yes when `T: Send + Sync` and contention justifies it |
+| One-time initialization | `OnceLock<T>` or `LazyLock<T>` | Yes when the initialized value is thread-safe |
+| Ownership transfer | Channel | Yes when sent values are `Send` |
+
 ## Example
 
 ```rust

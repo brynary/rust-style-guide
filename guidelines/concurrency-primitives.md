@@ -109,6 +109,27 @@ pub async fn run_worker(mut jobs: mpsc::Receiver<Job>) -> Result<(), Error> {
 }
 ```
 
+Bad: hold a lock while doing blocking or async work.
+
+```rust
+let mut cache = cache.lock().expect("cache mutex poisoned");
+let path = cache.entry(key).or_insert_with(default_path).clone();
+let bytes = std::fs::read(path)?;
+client.upload(bytes).await?;
+```
+
+Good: copy the needed value out, drop the lock, and isolate blocking work.
+
+```rust
+let path = {
+    let mut cache = cache.lock().expect("cache mutex poisoned");
+    cache.entry(key).or_insert_with(default_path).clone()
+};
+
+let bytes = tokio::task::spawn_blocking(move || std::fs::read(path)).await??;
+client.upload(bytes).await?;
+```
+
 ## Exceptions
 
 - Use Tokio locks when a task must wait asynchronously for shared state or a guard must intentionally live across `.await`.

@@ -88,6 +88,20 @@ define_id_type!(RunId);
 
 The macro earns its place only because every generated type is identical and correct on its own. If one ID needs validation or different behavior, or if the macro stops being simpler than the expanded code, delete it and write the types directly.
 
+Bad: add ad hoc unsafe to bypass ordinary bounds or checks.
+
+```rust
+let item = unsafe { items.get_unchecked(index) };
+```
+
+Good: use safe Rust unless an unsafe exception has been approved and documented.
+
+```rust
+let item = items
+    .get(index)
+    .ok_or_else(|| IndexError { index, len: items.len() })?;
+```
+
 ## Exceptions
 
 - Allow unsafe in crates whose purpose requires it, such as FFI bindings, low-level platform integration, carefully measured performance primitives, or hardware-adjacent code.

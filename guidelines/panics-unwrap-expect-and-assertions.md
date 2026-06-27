@@ -44,6 +44,23 @@ pub fn parse_port(raw: &str) -> Result<u16, std::num::ParseIntError> {
 }
 ```
 
+Bad: panic on operator input.
+
+```rust
+let port = std::env::var("PORT").unwrap().parse::<u16>().unwrap();
+```
+
+Good: return a diagnostic path.
+
+```rust
+use anyhow::Context;
+
+let port = std::env::var("PORT")
+    .context("PORT is required")?
+    .parse::<u16>()
+    .context("PORT should be a valid u16")?;
+```
+
 Use `expect` when a checked-in invariant is wrong:
 
 ```rust

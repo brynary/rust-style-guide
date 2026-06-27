@@ -77,7 +77,7 @@ pub fn load_config(path: &Path) -> Result<Config, ConfigError> {
 }
 ```
 
-Application code adds boundary context:
+Good: application code adds boundary context and preserves the source:
 
 ```rust
 use anyhow::{Context, Result};
@@ -92,7 +92,7 @@ fn run() -> Result<()> {
 }
 ```
 
-Avoid flattening the source into text:
+Bad: flatten the source into text and lose the chain:
 
 ```rust
 let config = config_lib::load_config(&path)
