@@ -18,6 +18,8 @@ Concrete refs make APIs easy to read and call. Owned returns and internal clones
 - Use `impl Into<String>` or `impl Into<T>` mainly for constructors and setters that store the owned value.
 - Use `From` for infallible, obvious conversions.
 - Use `TryFrom` or `FromStr` for validation and fallible parsing.
+- Use `From` for lossless numeric widening and `TryFrom` or `TryInto` for narrowing or signedness changes.
+- Choose explicit integer overflow behavior with `checked_*`, `saturating_*`, `wrapping_*`, or `overflowing_*` when overflow is possible and meaningful.
 - Use `as_*` for cheap borrowed or scalar views.
 - Use `to_*` for cloning, allocation, or conversion without consuming `self`.
 - Use `into_*` for consuming conversions.
@@ -31,7 +33,9 @@ Concrete refs make APIs easy to read and call. Owned returns and internal clones
 - Do not expose named lifetimes just to avoid cheap clones.
 - Do not use bare-noun accessors for owned snapshots, such as `labels() -> Vec<_>`.
 - Do not use `From` for conversions that can fail, validate, allocate surprisingly, or lose important meaning.
+- Do not use `as` for narrowing numeric casts or float-to-integer conversion unless range, sign, and NaN behavior are checked locally.
 - Do not use `as_*` for methods that allocate or clone.
+- Do not use `==` for approximate float equality; use a named tolerance, and use `total_cmp` when sorting floats that may include NaN.
 - Do not use `get_*` for simple field-like accessors.
 - Do not implement `Deref` just to forward methods from an inner value.
 - Do not use `Borrow` as a general-purpose parameter-flexibility tool; reserve it for lookup/key equivalence patterns.

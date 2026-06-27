@@ -18,6 +18,7 @@ Load this page when adding async APIs, spawning Tokio tasks, introducing async t
 - Keep pure helpers, validation, formatting, parsing, and small local transforms synchronous.
 - Use async traits only when callers need an abstraction, not just because implementations are async.
 - Add `Send + 'static` bounds only when values cross a spawned task, thread, or stored future boundary.
+- Keep spawned futures and task-boundary errors `Send + 'static`; erased errors crossing `tokio::spawn` boundaries need `Send + Sync + 'static`.
 - Spawn tasks from an owner that stores handles, cancellation tokens, and task-specific state.
 - Name task owner types by responsibility, such as `Poller`, `WorkerSet`, `TaskGroup`, or `Supervisor`.
 - Store `JoinHandle<Result<(), Error>>` when task failures must be reported.
@@ -35,6 +36,7 @@ Load this page when adding async APIs, spawning Tokio tasks, introducing async t
 - Do not force every helper into `async fn` only because a caller is async.
 - Do not add `Send`, `Sync`, or `'static` bounds by habit on ordinary async functions.
 - Do not hold non-`Send` values across `.await` in tasks that must run on a multithreaded Tokio runtime.
+- Do not let `Rc`, `RefCell`, or non-`Send` guards leak into public futures that should run on Tokio's multithreaded runtime.
 
 ## Library vs Application
 

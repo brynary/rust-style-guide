@@ -20,6 +20,7 @@ Load this page when adding long-lived async loops, graceful shutdown, timeouts, 
 - Put timeouts at operation boundaries: external calls, subprocesses, requests, jobs, and shutdown phases.
 - Keep inner helper functions timeout-free unless they own a real operation boundary.
 - Make cancellable sections idempotent or restartable when an `.await` can interrupt progress.
+- Treat losing `select!` branches as dropped futures; keep partial reads, buffers, and side effects recoverable.
 - Commit external side effects in small, explicit steps with clear retry or rollback behavior.
 - Use `tokio::task::spawn_blocking` for blocking filesystem, compression, parsing through blocking APIs, or short CPU-heavy work.
 - Use a dedicated pool, work queue, or `rayon` for sustained CPU-bound workloads.
@@ -34,6 +35,7 @@ Load this page when adding long-lived async loops, graceful shutdown, timeouts, 
 - Do not ignore `JoinHandle` errors during shutdown.
 - Do not use `abort` as the normal shutdown path for tasks that need cleanup.
 - Do not hold a lock guard across `.await` unless the design explicitly requires an async lock.
+- Do not put non-cancel-safe work directly in a `select!` branch without owning the state needed to resume or retry it.
 - Do not assume `spawn_blocking` makes unlimited CPU work cheap; it still needs backpressure.
 
 ## Example

@@ -19,6 +19,7 @@ Accept concrete borrowed string, slice, and path parameters by default; store ow
 - Use `IntoIterator` for APIs whose purpose is to consume or extend from a sequence of items.
 - Use `AsRef<str>` or `AsRef<Path>` only when caller flexibility clearly helps and the bound stays local.
 - Use `impl Into<String>` mostly for constructors or setters that immediately store the owned value.
+- Accept `impl Read` or `impl Write` when a reusable library should test I/O behavior without touching the filesystem.
 - Use `Cow` only when the API genuinely often borrows but sometimes allocates, and the lifetime stays local.
 
 ## Avoid
@@ -121,5 +122,6 @@ pub fn normalize_extension(extension: &str) -> Cow<'_, str> {
 
 - Accept owned values when the function consumes ownership, stores without cloning, or mirrors a standard library convention.
 - Use `impl AsRef<Path>` for top-level file-opening helpers when accepting many path-like caller types is the main ergonomic benefit.
+- Use `impl Read` or `impl Write` for lower-level helpers whose purpose is data processing, not path handling.
 - Use `Cow` in parsing, normalization, and formatting helpers that can usually return a borrowed value.
 - Use slices of references, such as `&[&str]`, when the call sites naturally already have borrowed items.

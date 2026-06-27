@@ -17,6 +17,7 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 - Use pragmatic dependency policy for applications when a dependency materially improves clarity or reliability.
 - Prefer mature, maintained crates for domain behavior over small convenience crates.
 - Keep reusable library features additive and opt-in.
+- Make `serde` optional for reusable libraries unless serialization is core to the crate.
 - Verify reusable library changes with `--all-features` so feature-gated code stays compiled, linted, and tested.
 - Check MSRV after adding dependencies or using newly stabilized APIs.
 
@@ -27,6 +28,7 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 - Do not use mutually exclusive Cargo features.
 - Do not make default library features pull in heavy optional integrations.
 - Do not add feature flags before there is a real optional integration.
+- Do not derive serialization for a public type without deciding its wire-format compatibility policy.
 - Do not let dependency updates silently raise the practical MSRV.
 
 ## Library vs Application
@@ -34,6 +36,8 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 Libraries should minimize default dependencies and keep feature flags additive. Applications can depend directly on the concrete crates they use and usually do not need feature flags around internal implementation details.
 
 For libraries, treat public dependency exposure and MSRV bumps as compatibility decisions. For applications, still keep `rust-version` honest, but prefer simple direct configuration over library-style feature plumbing.
+
+Treat serialized formats as API contracts. Choose field names, enum representation, defaults, and unknown-field behavior deliberately before publishing data that other processes or versions must read.
 
 ## Example
 

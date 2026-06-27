@@ -15,8 +15,10 @@ Boundary validation makes invalid data fail early and keeps checks close to pars
 - Use `try_new`, `parse`, `TryFrom`, or `FromStr` for fallible construction.
 - Keep invariant-bearing fields private.
 - Use newtypes for validated strings, IDs, units, ranges, and values with public API meaning.
+- Use `NonZero*` types when zero is invalid and the primitive representation still matters.
 - Use fallible startup validation for configuration so services fail before doing work with invalid settings.
 - Pass validated types through internal code instead of raw `String`, `u64`, or `bool` values.
+- Deserialize into types that enforce invariants, or deserialize raw input and convert with `TryFrom`.
 - Use assertions for internal invariants that should already have been guaranteed by earlier parsing or construction.
 
 ## Avoid

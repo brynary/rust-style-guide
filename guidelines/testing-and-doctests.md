@@ -18,6 +18,7 @@ Unit tests give fast feedback around dense logic and invariants. Integration tes
 - Use fallible tests returning `Result<(), Error>` when setup or assertions naturally use `?`.
 - Keep setup helpers small, explicit, and named after domain concepts.
 - Prefer real values and temp files or directories where practical; use fakes or mocks only at external, slow, or nondeterministic boundaries.
+- For reusable libraries, expose narrow seams for file, network, time, randomness, subprocess, or OS behavior when edge cases must be tested.
 - Put regression tests at the level where the bug was observable.
 - Keep assertions specific about behavior, errors, and state changes.
 
@@ -31,6 +32,7 @@ Unit tests give fast feedback around dense logic and invariants. Integration tes
 - Do not add sleeps or timing-dependent tests; use controlled clocks, explicit events, or boundary timeouts.
 - Do not assert only that code "does not panic" when behavior can be checked.
 - Do not introduce broad test-only public APIs.
+- Do not hide test-only controls in normal library APIs; gate them behind `cfg(test)` or a deliberate `test-util` feature.
 - Do not skip meaningful integration coverage just because unit tests pass.
 
 ## Example
