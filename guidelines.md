@@ -6,67 +6,67 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 ## Foundations
 
-- [House style and Rust philosophy](guidelines/house-style-and-rust-philosophy.md)
-- [Library vs application conventions](guidelines/library-vs-application-conventions.md)
-- [Rust edition and MSRV](guidelines/rust-edition-and-msrv.md)
+- [House style and Rust philosophy](guidelines/house-style-and-rust-philosophy.md) - load for overall code shape, OO-leaning defaults, and Rust idiom tradeoffs.
+- [Library vs application conventions](guidelines/library-vs-application-conventions.md) - load before choosing policies that differ for libraries, apps, CLIs, tests, or services.
+- [Rust edition and MSRV](guidelines/rust-edition-and-msrv.md) - load when setting edition, `rust-version`, stable/nightly posture, or checking MSRV impact.
 
 ## Tooling and Project Shape
 
-- [rustfmt and formatting](guidelines/rustfmt-and-formatting.md)
-- [rustc and Clippy lints](guidelines/rustc-and-clippy-lints.md)
-- [Cargo, workspaces, features, and dependencies](guidelines/cargo-workspaces-features-and-dependencies.md)
-- [Modules, visibility, and re-exports](guidelines/modules-visibility-and-re-exports.md)
-- [Naming, imports, and prelude policy](guidelines/naming-imports-and-prelude-policy.md)
-- [Documentation and rustdoc examples](guidelines/documentation-and-rustdoc-examples.md)
+- [rustfmt and formatting](guidelines/rustfmt-and-formatting.md) - load when configuring rustfmt or handling formatting exceptions.
+- [rustc and Clippy lints](guidelines/rustc-and-clippy-lints.md) - load when configuring lints, fixing Clippy, or justifying lint exceptions.
+- [Cargo, workspaces, features, and dependencies](guidelines/cargo-workspaces-features-and-dependencies.md) - load for workspace layout, features, dependency choices, and MSRV-aware dependency changes.
+- [Modules, visibility, and re-exports](guidelines/modules-visibility-and-re-exports.md) - load when changing `mod`, `pub`, facades, re-exports, or public paths.
+- [Naming, imports, and prelude policy](guidelines/naming-imports-and-prelude-policy.md) - load for item names, acronym casing, imports, getters, and preludes.
+- [Documentation and rustdoc examples](guidelines/documentation-and-rustdoc-examples.md) - load when writing rustdoc, public docs, examples, or `Errors`/`Panics`/`Safety` sections.
 
 ## Type and API Design
 
-- [Struct design and encapsulation](guidelines/struct-design-and-encapsulation.md)
-- [Constructors and builders](guidelines/constructors-and-builders.md)
-- [Newtype pattern and semantic wrappers](guidelines/newtype-pattern-and-semantic-wrappers.md)
-- [Enums vs traits vs generics vs trait objects](guidelines/enums-vs-traits-vs-generics-vs-trait-objects.md)
-- [Trait design](guidelines/trait-design.md)
-- [Deriving and common trait implementations](guidelines/deriving-and-common-trait-implementations.md)
-- [Conversions, getters, and method naming](guidelines/conversions-getters-and-method-naming.md)
-- [Typestate and state machines](guidelines/typestate-and-state-machines.md)
-- [Public API evolution](guidelines/public-api-evolution.md)
+- [Struct design and encapsulation](guidelines/struct-design-and-encapsulation.md) - load when designing structs, fields, invariants, receivers, or encapsulation boundaries.
+- [Constructors and builders](guidelines/constructors-and-builders.md) - load when choosing `new`, `try_new`, `Default`, builders, or typestate builders.
+- [Newtype pattern and semantic wrappers](guidelines/newtype-pattern-and-semantic-wrappers.md) - load when adding IDs, units, validated strings, value objects, or orphan-rule wrappers.
+- [Enums vs traits vs generics vs trait objects](guidelines/enums-vs-traits-vs-generics-vs-trait-objects.md) - load when choosing closed sets, extension points, static dispatch, or dynamic dispatch.
+- [Trait design](guidelines/trait-design.md) - load when designing traits, bounds, associated types, blanket impls, sealed traits, or object-safe APIs.
+- [Deriving and common trait implementations](guidelines/deriving-and-common-trait-implementations.md) - load when adding derives or manual impls for standard traits.
+- [Conversions, getters, and method naming](guidelines/conversions-getters-and-method-naming.md) - load for `From`, `TryFrom`, `AsRef`, `Deref`, accessors, and `as_`/`to_`/`into_` names.
+- [Typestate and state machines](guidelines/typestate-and-state-machines.md) - load for ordered workflow states, data-bearing enums, `PhantomData`, or compile-time transitions.
+- [Public API evolution](guidelines/public-api-evolution.md) - load for externally consumed APIs, semver, `#[non_exhaustive]`, `#[must_use]`, public fields, or sealed traits.
 
 ## Ownership and Data Flow
 
-- [Ownership, borrowing, and clone policy](guidelines/ownership-borrowing-and-clone-policy.md)
-- [Strings, slices, and flexible parameters](guidelines/strings-slices-and-flexible-parameters.md)
-- [Lifetimes](guidelines/lifetimes.md)
-- [Smart pointers and interior mutability](guidelines/smart-pointers-and-interior-mutability.md)
-- [Collections and data structures](guidelines/collections-and-data-structures.md)
+- [Ownership, borrowing, and clone policy](guidelines/ownership-borrowing-and-clone-policy.md) - load when choosing borrowed inputs, owned outputs, accessors, snapshots, or clone tradeoffs.
+- [Strings, slices, and flexible parameters](guidelines/strings-slices-and-flexible-parameters.md) - load for `String`/`&str`, `Path`/`&Path`, slices, `IntoIterator`, `AsRef`, `Into`, or `Cow`.
+- [Lifetimes](guidelines/lifetimes.md) - load when explicit lifetimes, borrowed structs, or lifetime-heavy APIs appear.
+- [Smart pointers and interior mutability](guidelines/smart-pointers-and-interior-mutability.md) - load when choosing `Box`, `Rc`, `Arc`, `Cell`, `RefCell`, locks, or one-time initialization.
+- [Collections and data structures](guidelines/collections-and-data-structures.md) - load when choosing `Vec`, maps, sets, deterministic ordering, capacity, or specialized collection crates.
 
 ## Errors, Safety, and Diagnostics
 
-- [Error taxonomy and layer boundaries](guidelines/error-taxonomy-and-layer-boundaries.md)
-- [Library errors vs application errors](guidelines/library-errors-vs-application-errors.md)
-- [Error propagation, context, and messages](guidelines/error-propagation-context-and-messages.md)
-- [Panics, unwrap, expect, and assertions](guidelines/panics-unwrap-expect-and-assertions.md)
-- [Validation and invariants](guidelines/validation-and-invariants.md)
-- [Logging and observability](guidelines/logging-and-observability.md)
+- [Error taxonomy and layer boundaries](guidelines/error-taxonomy-and-layer-boundaries.md) - load when defining domain, infrastructure, boundary, or branch-oriented error layers.
+- [Library errors vs application errors](guidelines/library-errors-vs-application-errors.md) - load before choosing `thiserror`, `anyhow`, `miette`, or public error stability.
+- [Error propagation, context, and messages](guidelines/error-propagation-context-and-messages.md) - load when adding `?`, context, source chains, or error message text.
+- [Panics, unwrap, expect, and assertions](guidelines/panics-unwrap-expect-and-assertions.md) - load when using panic, `unwrap`, `expect`, assertions, `unreachable!`, `todo!`, or public panic docs.
+- [Validation and invariants](guidelines/validation-and-invariants.md) - load when parsing inputs, enforcing constructors, encoding invariants, or re-checking stale state.
+- [Logging and observability](guidelines/logging-and-observability.md) - load when adding `tracing`, spans, fields, levels, error logs, or redaction.
 
 ## Async and Concurrency
 
-- [Async runtime and when to use async](guidelines/async-runtime-and-when-to-use-async.md)
-- [Async API design and task lifecycle](guidelines/async-api-design-and-task-lifecycle.md)
-- [Cancellation, shutdown, and blocking work](guidelines/cancellation-shutdown-and-blocking-work.md)
-- [Concurrency primitives](guidelines/concurrency-primitives.md)
+- [Async runtime and when to use async](guidelines/async-runtime-and-when-to-use-async.md) - load when deciding sync vs async posture, Tokio use, or runtime boundaries.
+- [Async API design and task lifecycle](guidelines/async-api-design-and-task-lifecycle.md) - load when adding async APIs, async traits, spawning, task owners, `Send`, or shutdown handles.
+- [Cancellation, shutdown, and blocking work](guidelines/cancellation-shutdown-and-blocking-work.md) - load for cancellation tokens, `select!`, timeouts, `spawn_blocking`, CPU work, or graceful shutdown.
+- [Concurrency primitives](guidelines/concurrency-primitives.md) - load when adding channels, locks, atomics, shared state, worker pools, or blocking APIs on async paths.
 
 ## Everyday Implementation
 
-- [Control flow](guidelines/control-flow.md)
-- [Option and Result idioms](guidelines/option-and-result-idioms.md)
-- [Iterators, closures, and loops](guidelines/iterators-closures-and-loops.md)
-- [Mutation style](guidelines/mutation-style.md)
+- [Control flow](guidelines/control-flow.md) - load when choosing `match`, `if let`, `let else`, guards, early returns, or combinators.
+- [Option and Result idioms](guidelines/option-and-result-idioms.md) - load when transforming `Option`/`Result`, using `ok_or_else`, `transpose`, `map`, or explicit branching.
+- [Iterators, closures, and loops](guidelines/iterators-closures-and-loops.md) - load when choosing iterator chains, loops, closure capture, `collect`, `fold`, or `try_fold`.
+- [Mutation style](guidelines/mutation-style.md) - load when choosing mutable locals, in-place updates, immutable transforms, or builder-style mutation.
 
 ## Testing and Release
 
-- [Testing and doctests](guidelines/testing-and-doctests.md)
-- [Property tests, snapshots, benchmarks, and CI](guidelines/property-tests-snapshots-benchmarks-and-ci.md)
-- [Unsafe code and macros](guidelines/unsafe-code-and-macros.md)
+- [Testing and doctests](guidelines/testing-and-doctests.md) - load when writing unit tests, integration tests, doctests, fixtures, or test helpers.
+- [Property tests, snapshots, benchmarks, and CI](guidelines/property-tests-snapshots-benchmarks-and-ci.md) - load when configuring test commands, snapshots, property tests, benchmarks, or CI gates.
+- [Unsafe code and macros](guidelines/unsafe-code-and-macros.md) - load when touching `unsafe`, FFI, raw pointers, `macro_rules!`, proc macros, or generated APIs.
 
 ## Routing Notes
 
