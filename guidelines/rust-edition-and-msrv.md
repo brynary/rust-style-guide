@@ -14,7 +14,7 @@ The edition controls language compatibility, and `rust-version` tells Cargo and 
 - Set `rust-version = "1.85"` for Rust 2024 crates unless the project has a higher or lower documented MSRV.
 - Keep workspace member editions and MSRVs consistent unless a crate has a specific reason to differ.
 - Treat MSRV bumps in reusable libraries as public compatibility changes.
-- Check library changes against the declared MSRV, not only the local stable compiler.
+- Check library changes against the declared MSRV, not only the local stable compiler, and include all feature-gated code.
 - Use stable Rust by default.
 
 ## Avoid
@@ -48,7 +48,7 @@ When changing a reusable library, verify the declared MSRV explicitly:
 
 ```sh
 rustup toolchain install 1.85.0
-cargo +1.85.0 check --workspace --all-targets
+cargo +1.85.0 check --workspace --all-targets --all-features
 ```
 
 Use the new project workflow for initial workspace setup.

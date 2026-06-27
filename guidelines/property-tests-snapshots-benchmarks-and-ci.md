@@ -2,7 +2,7 @@
 
 ## Rule
 
-Use `cargo nextest run` as the default test runner; add `insta` when snapshots make complex output easier to review, and add property or benchmark tools only for real invariant or performance needs.
+Use `cargo nextest run --workspace --all-targets --all-features` as the default workspace test runner; add `insta` when snapshots make complex output easier to review, and add property or benchmark tools only for real invariant or performance needs.
 
 ## Activation
 
@@ -14,8 +14,8 @@ Nextest gives a consistent test runner for local and CI workflows. Snapshot, pro
 
 ## Do
 
-- Run `cargo nextest run --workspace --all-targets` as the normal local and CI test command.
-- Keep `cargo test` available for cases Nextest does not cover; run `cargo test --doc` only when the project explicitly opts into doctests.
+- Run `cargo nextest run --workspace --all-targets --all-features` as the normal local and CI test command.
+- Keep `cargo test` available for cases Nextest does not cover; run `cargo test --doc --workspace --all-features` only when the project explicitly opts into doctests.
 - Run pinned rustfmt and Clippy checks in CI alongside tests.
 - Add `insta` for stable textual or structured outputs such as CLI output, diagnostics, generated config, serialized data, and rendered reports.
 - Commit snapshot files and review snapshot diffs before accepting them.
@@ -42,8 +42,8 @@ Run the configured CI commands before handing off Rust changes:
 
 ```sh
 cargo +nightly-2026-04-14 fmt --check --all
-cargo clippy --locked --workspace --all-targets -- -D warnings
-cargo nextest run --workspace --all-targets
+cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+cargo nextest run --workspace --all-targets --all-features
 ```
 
 Use the new project workflow for initial CI setup.
@@ -81,7 +81,8 @@ proptest! {
 ## Exceptions
 
 - Existing projects may keep `cargo test` as the primary runner until Nextest is deliberately added.
-- Run `cargo test --doc` in projects that intentionally maintain doctests.
+- Run `cargo test --doc --workspace --all-features` in projects that intentionally maintain doctests.
 - Use `quickcheck` when it is already the established project convention.
 - Use custom benchmark or load-test infrastructure for services where `criterion` does not model the real performance risk.
 - Skip specialized tooling for small crates where ordinary tests make the behavior clear.
+- Replace `--all-features` with a documented feature matrix only when a crate intentionally has incompatible feature combinations.

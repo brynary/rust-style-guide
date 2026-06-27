@@ -26,8 +26,8 @@ Load the async guideline when the project is async. Load logging, public API, an
 4. Set Rust 2024 and `rust-version = "1.85"` unless the project already has different constraints.
 5. Add pinned rustfmt configuration and use `nightly-2026-04-14` for formatting.
 6. Add curated workspace lints and tailor project-specific `clippy.toml` guardrails before copying async/blocking disallow rules.
-7. Use `cargo nextest run` as the normal test runner.
-8. Skip doctests by default; run `cargo test --doc` only when the project explicitly opts into maintaining rustdoc examples.
+7. Use `cargo nextest run --workspace --all-targets --all-features` as the normal workspace test runner.
+8. Skip doctests by default; run `cargo test --doc --workspace --all-features` only when the project explicitly opts into maintaining rustdoc examples.
 9. Add dependencies only when they remove real complexity or provide mature domain behavior.
 10. Verify the project with the configured commands before handing it off.
 
@@ -153,15 +153,15 @@ Use these commands as the default new-project validation set:
 
 ```sh
 cargo +nightly-2026-04-14 fmt --check --all
-cargo clippy --locked --workspace --all-targets -- -D warnings
-cargo nextest run --workspace --all-targets
-cargo +1.85.0 check --workspace --all-targets
+cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+cargo nextest run --workspace --all-targets --all-features
+cargo +1.85.0 check --workspace --all-targets --all-features
 ```
 
 If the project intentionally maintains doctests, add:
 
 ```sh
-cargo test --doc
+cargo test --doc --workspace --all-features
 ```
 
 ## Avoid

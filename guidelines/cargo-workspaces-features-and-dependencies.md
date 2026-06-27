@@ -17,6 +17,7 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 - Use pragmatic dependency policy for applications when a dependency materially improves clarity or reliability.
 - Prefer mature, maintained crates for domain behavior over small convenience crates.
 - Keep reusable library features additive and opt-in.
+- Verify reusable library changes with `--all-features` so feature-gated code stays compiled, linted, and tested.
 - Check MSRV after adding dependencies or using newly stabilized APIs.
 
 ## Avoid
@@ -77,7 +78,7 @@ tracing.workspace = true
 Verify MSRV after dependency or API changes:
 
 ```sh
-cargo +1.85.0 check --workspace --all-targets
+cargo +1.85.0 check --workspace --all-targets --all-features
 ```
 
 ## Exceptions
@@ -86,3 +87,4 @@ cargo +1.85.0 check --workspace --all-targets
 - Use default features in a library when the crate is intentionally batteries-included and downstream compile impact is acceptable.
 - Use exact or pinned dependency versions only when reproducibility, upstream breakage, or security response requires it.
 - Split a crate from the workspace only when it has a truly different release, MSRV, or dependency policy.
+- Use a documented feature matrix instead of `--all-features` only when a crate intentionally supports mutually incompatible feature sets.
