@@ -2,7 +2,7 @@
 
 ## Rule
 
-Keep modules and fields private by default, expose focused public facades, and avoid broad preludes unless the crate is a broad ecosystem crate.
+Keep modules and fields private by default, expose focused public facades, give each local item one intended public path, and avoid broad preludes unless the crate is a broad ecosystem crate.
 
 ## Why
 
@@ -15,6 +15,8 @@ Rust visibility is an API design tool. Smaller public surfaces make invariants e
 - Use `pub(crate)` for real internal boundaries across modules.
 - Use `pub(super)` only for tight parent-child module collaboration.
 - Re-export the public types callers should name from the crate root or a focused facade module.
+- Choose one canonical public path for each local item: either a facade re-export or a public module path.
+- Use `#[doc(inline)]` on intentional facade re-exports so rustdoc presents the item at the path callers should use.
 - Use public fields only for plain data structs with no invariants.
 - Keep internal helper modules behind `mod`, not `pub mod`.
 
@@ -25,11 +27,14 @@ Rust visibility is an API design tool. Smaller public surfaces make invariants e
 - Do not create a prelude for a small crate.
 - Do not expose fields just to make tests easier.
 - Do not re-export every internal type from the crate root.
+- Do not expose the same local type through both a deep public module and a facade path by accident.
 - Do not make module layout mirror implementation churn in the public API.
 
 ## Public API Notes
 
 For libraries, every `pub` item is part of the compatibility contract unless hidden behind documented instability. Prefer a small public facade that names the crate's main concepts and hides helper modules.
+
+When a facade is the intended public API, keep implementation modules private and re-export the public item from the facade. If a deep module is itself a stable namespace, expose the module and avoid also re-exporting the same local item from the root unless the duplicate path is an intentional compatibility or ergonomics choice.
 
 For applications, `pub(crate)` is often enough for cross-module use. Avoid public exports from binary crates unless integration tests or generated code require them.
 
@@ -41,8 +46,11 @@ mod client;
 mod error;
 mod request;
 
+#[doc(inline)]
 pub use client::Client;
+#[doc(inline)]
 pub use error::ClientError;
+#[doc(inline)]
 pub use request::Request;
 ```
 
