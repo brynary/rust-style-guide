@@ -1,0 +1,9 @@
+[book]
+title = "Rust Style Guide"
+description = "Opinionated Rust style guidance for AI coding agents."
+language = "en"
+src = "src"
+
+[build]
+build-dir = "book"
+create-missing = false
