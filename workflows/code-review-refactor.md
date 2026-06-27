@@ -1,4 +1,4 @@
-# Existing Code Review and Refactor
+# Code Review and Refactor
 
 Use this workflow when reviewing, refactoring, or changing existing Rust code in a project that already has structure and conventions.
 

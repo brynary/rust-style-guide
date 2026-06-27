@@ -8,7 +8,7 @@ Use this skill to apply the project's Rust style conventions while writing, revi
 - [workflows/new-rust-project.md](workflows/new-rust-project.md) - workflow for creating or configuring a new Rust crate, workspace, CLI, library, service, or application.
 - [workflows/reusable-library-release.md](workflows/reusable-library-release.md) - workflow for verifying reusable library releases, feature combinations, dependency checks, and out-of-box builds.
 - [workflows/performance-investigation.md](workflows/performance-investigation.md) - workflow for measuring, profiling, and changing performance-sensitive Rust code.
-- [workflows/existing-code-review-refactor.md](workflows/existing-code-review-refactor.md) - workflow for reviewing, refactoring, or changing existing Rust code.
+- [workflows/code-review-refactor.md](workflows/code-review-refactor.md) - workflow for reviewing, refactoring, or changing existing Rust code.
 
 ## Routing Examples
 
@@ -17,7 +17,7 @@ Use this skill to apply the project's Rust style conventions while writing, revi
 | Create a new Rust project | [workflows/new-rust-project.md](workflows/new-rust-project.md), [guidelines.md](guidelines.md) |
 | Verify a reusable library release | [workflows/reusable-library-release.md](workflows/reusable-library-release.md), [guidelines.md](guidelines.md) |
 | Investigate performance | [workflows/performance-investigation.md](workflows/performance-investigation.md), [guidelines.md](guidelines.md) |
-| Review or refactor existing code | [workflows/existing-code-review-refactor.md](workflows/existing-code-review-refactor.md), [guidelines.md](guidelines.md) |
+| Review or refactor code | [workflows/code-review-refactor.md](workflows/code-review-refactor.md), [guidelines.md](guidelines.md) |
 | Define a public library error type | [guidelines.md](guidelines.md), library/application errors, error propagation, public API evolution |
 | Handle top-level CLI/application errors | [guidelines.md](guidelines.md), library/application errors, error propagation, panics |
 | Choose enum vs trait vs trait object | [guidelines.md](guidelines.md), enums vs traits, trait design, public API evolution |
