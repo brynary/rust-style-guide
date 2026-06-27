@@ -11,10 +11,10 @@ Async changes function signatures, trait design, tests, runtime setup, cancellat
 ## Do
 
 - Check the project's documented async posture before adding async APIs, blocking calls, runtime setup, or spawned tasks.
-- Document the posture when it is missing: sync-first, Tokio-first, or mixed.
+- Document the posture when it is missing: sync or async.
 - Document where async is allowed, such as HTTP handlers, workers, clients, subprocess orchestration, streaming, or background tasks.
 - Document runtime conventions: Tokio version/features, test macros, shutdown style, timeout policy, and blocking-work policy.
-- Use Tokio for async runtime integration when the project chooses async.
+- Use Tokio for async runtime integration when the project is async.
 - Use async for real async work: network I/O, timers, streaming, subprocess orchestration, concurrent service work, and APIs that are already Tokio-based.
 - Keep CPU-bound computation, parsing, validation, formatting, and simple local transforms synchronous.
 - Use sync helpers inside async code when they are short, CPU-local, and do not block on I/O or locks.
@@ -32,7 +32,7 @@ Async changes function signatures, trait design, tests, runtime setup, cancellat
 
 ## Library vs Application
 
-Applications own the runtime, task lifecycle, shutdown, and subscriber setup. They may choose a Tokio-first architecture when services, workers, clients, or orchestration naturally need async.
+Applications own the runtime, task lifecycle, shutdown, and subscriber setup. Async applications use Tokio when services, workers, clients, or orchestration need async.
 
 Libraries should not install runtimes or hide task lifecycles. A library may expose Tokio-based APIs when async behavior is central to its purpose, but the runtime dependency should be documented instead of accidental.
 
@@ -43,8 +43,8 @@ Document the project posture near the project rules:
 ```markdown
 ## Async Policy
 
-This project is Tokio-first for HTTP handlers, background workers, external API
-clients, timers, and subprocess orchestration.
+This project is async and uses Tokio for HTTP handlers, background workers,
+external API clients, timers, and subprocess orchestration.
 
 Keep parsing, validation, formatting, and pure domain logic synchronous. Do not
 add parallel sync and async APIs without an explicit caller requirement.
@@ -74,7 +74,6 @@ fn render_response(record: Record) -> Response {
 
 ## Exceptions
 
-- Use a sync-first posture for CLIs, libraries, or tools whose work is mostly local, CPU-bound, or short-lived.
-- Use a mixed posture when a project has clear async boundaries but most domain logic should stay synchronous.
+- Use a sync posture for CLIs, libraries, or tools whose work is mostly local, CPU-bound, or short-lived.
 - Add runtime abstraction only when the project has real callers on multiple runtimes.
 - Keep a small sync wrapper around async code only when it is an application convenience and runtime ownership is obvious.

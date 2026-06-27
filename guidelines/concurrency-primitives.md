@@ -40,7 +40,7 @@ Load this page when adding channels, locks, atomics, worker pools, shared state,
 
 ## Async Notes
 
-Fabro-style lint rules are relevant for Tokio-first projects. Use `clippy::disallowed_methods` and `clippy::disallowed_types` to catch blocking APIs such as `std::thread::sleep`, `std::thread::spawn`, `std::process::Command`, `std::fs`, `std::io`, and `std::net` on async paths.
+Fabro-style lint rules are relevant for async projects. Use `clippy::disallowed_methods` and `clippy::disallowed_types` to catch blocking APIs such as `std::thread::sleep`, `std::thread::spawn`, `std::process::Command`, `std::fs`, `std::io`, and `std::net` on async paths.
 
 Do not treat those lints as a blanket ban on `std::sync`. Standard-library locks are fine in async code when the critical section is short, does not block, and the guard is dropped before `.await`.
 

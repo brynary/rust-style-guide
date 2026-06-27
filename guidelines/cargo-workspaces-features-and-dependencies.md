@@ -60,7 +60,7 @@ serde = ["dep:serde"]
 pub struct RunId(String);
 ```
 
-Application with direct concrete dependencies:
+Async application with direct concrete dependencies:
 
 ```toml
 [package]
@@ -70,7 +70,7 @@ rust-version.workspace = true
 
 [dependencies]
 anyhow.workspace = true
-tokio.workspace = true
+tokio = { version = "1", features = ["full"] }
 tracing.workspace = true
 ```
 

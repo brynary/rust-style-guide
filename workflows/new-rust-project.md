@@ -16,12 +16,12 @@ Load [guidelines.md](../guidelines.md), then load these guideline pages as neede
 - [Property tests, snapshots, benchmarks, and CI](../guidelines/property-tests-snapshots-benchmarks-and-ci.md)
 - [Unsafe code and macros](../guidelines/unsafe-code-and-macros.md)
 
-Also load async, logging, public API, and error guidelines when the project is an async service, reusable library, or CLI/application with diagnostics.
+Load the async guideline when the project is async. Load logging, public API, and error guidelines when those surfaces apply.
 
 ## Workflow
 
 1. Identify the project shape: library, application, CLI, service, test support crate, or mixed workspace.
-2. Make the sync-vs-async posture explicit before adding async dependencies: sync-first, Tokio-first, or mixed.
+2. Make the sync-vs-async posture explicit before adding async dependencies; async projects use Tokio.
 3. Prefer a workspace when multiple crates share version, edition, dependencies, lints, or profiles.
 4. Set Rust 2024 and `rust-version = "1.85"` unless the project already has different constraints.
 5. Add pinned rustfmt configuration and use `nightly-2026-04-14` for formatting.
@@ -48,7 +48,6 @@ rust-version = "1.85"
 anyhow = "1"
 serde = { version = "1", features = ["derive"] }
 thiserror = "2"
-tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 
 [workspace.lints.rust]
@@ -90,6 +89,12 @@ absolute_paths = "warn"
 
 For a single crate, put the same package fields and lint tables in the crate's `Cargo.toml` instead of a workspace root.
 
+For async projects, add Tokio deliberately to the package or workspace dependencies:
+
+```toml
+tokio = { version = "1", features = ["full"] }
+```
+
 ## rustfmt Baseline
 
 Use this `rustfmt.toml` at the project root:
@@ -124,7 +129,7 @@ rustup toolchain install nightly-2026-04-14 --profile minimal --component rustfm
 
 ## Optional Clippy Guardrails
 
-Use `clippy.toml` for project-specific architectural guardrails. For Tokio-first projects, review rules like these before copying them:
+Use `clippy.toml` for project-specific architectural guardrails. For async projects, review rules like these before copying them:
 
 ```toml
 allow-unwrap-in-tests = true
@@ -163,6 +168,6 @@ cargo test --doc
 
 - Do not add async casually; document the project posture first.
 - Do not add every standard dependency to every project by default.
-- Do not copy Tokio-specific Clippy guardrails into sync-first projects without tailoring them.
+- Do not copy Tokio-specific Clippy guardrails into sync projects.
 - Do not create broad preludes, public facades, or feature flags before the project needs them.
 - Do not lower `unsafe_code = "deny"` unless the new crate's purpose requires unsafe code.

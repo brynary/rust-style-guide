@@ -151,7 +151,7 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
 ### Async and Concurrency
 
 30. **Async Runtime and When to Use Async**
-    - Cover Tokio-first vs runtime-agnostic design, sync alternatives, and library/runtime boundaries.
+    - Cover sync vs async project posture, Tokio usage for async projects, and library/runtime boundaries.
     - Decision points: D16, D45.
 
 31. **Async API Design and Task Lifecycle**
