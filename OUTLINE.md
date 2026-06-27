@@ -198,14 +198,6 @@ Use [DECISIONS.md](DECISIONS.md) to resolve style decisions before drafting fina
     - Cover when `unsafe` is allowed, `SAFETY:` comments, safe abstraction boundaries, `macro_rules!`, proc macros, and macro restraint.
     - Decision points: D25.
 
-## Sample Topic Pages
-
-Three sample pages use the proposed format:
-
-- [Error Handling Strategy](samples/error-handling-strategy.md)
-- [Enums vs Traits](samples/enums-vs-traits.md)
-- [Logging and Observability](samples/logging-and-observability.md)
-
 ## Topics Folded In
 
 These are important, but probably do not need standalone pages in v1 unless the target codebase depends on them heavily:

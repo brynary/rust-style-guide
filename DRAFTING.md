@@ -47,4 +47,4 @@ Use these instructions when turning the outline into topic pages.
 - Do not add advanced topics unless they affect likely agent output.
 - Keep library/application differences explicit when the right answer changes by context.
 - Treat public API guidance as stricter than internal application guidance.
-- Do not package planning files, research reports, or samples into the final skill unless the user explicitly asks for them.
+- Do not package planning files or research reports into the final skill unless the user explicitly asks for them.

@@ -12,7 +12,6 @@ Keep the work simple, explicit, and useful for agents. Do not turn the guide int
 - [DECISIONS.md](DECISIONS.md): unresolved style decisions and suggested defaults.
 - [DRAFTING.md](DRAFTING.md): drafting order, scope rules, and page-writing guidance.
 - [TEMPLATE.md](TEMPLATE.md): required topic page format.
-- [samples/](samples): sample topic pages showing the desired format.
 - [SKILL.md](SKILL.md): draft root skill router for the packaged skill.
 - [references/topics.md](references/topics.md): draft topic index for progressive disclosure.
 - [.ai/research/](.ai/research): source research reports used to create the outline.
@@ -26,7 +25,6 @@ Keep the work simple, explicit, and useful for agents. Do not turn the guide int
 - Put unresolved choices in `Decision Points` instead of hiding them in prose.
 - Keep [SKILL.md](SKILL.md) small. Put detailed guidance in focused files under `references/`.
 - Link reference files directly from [SKILL.md](SKILL.md) or [references/topics.md](references/topics.md); avoid deep reference chains.
-- Treat the sample pages as format examples, not final policy unless the user says otherwise.
 - Do not edit files in [.ai/research/](.ai/research) unless explicitly asked.
 
 ## Style Guide Bias
@@ -45,4 +43,4 @@ The intended guide is Rust-idiomatic with an OO-leaning default:
 - Keep changes narrowly scoped to the requested document.
 - Avoid adding new topic files unless the user asks to start drafting pages.
 - When adding or changing decisions, update [DECISIONS.md](DECISIONS.md) and keep topic references in [OUTLINE.md](OUTLINE.md) consistent.
-- Do not include planning docs, samples, or research reports in the final packaged skill unless explicitly requested.
+- Do not include planning docs or research reports in the final packaged skill unless explicitly requested.

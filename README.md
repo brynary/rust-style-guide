@@ -14,7 +14,6 @@ The current packaged skill shape is `SKILL.md`, `agents/openai.yaml`, and focuse
 - [DECISIONS.md](DECISIONS.md): resolved style decision register.
 - [DRAFTING.md](DRAFTING.md): drafting order, page rules, and scope rules.
 - [TEMPLATE.md](TEMPLATE.md): the required format for each topic page.
-- [samples/](samples): sample pages used as format references.
 - [AGENTS.md](AGENTS.md): repository instructions for AI coding agents.
 
 ## Research
