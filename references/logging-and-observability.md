@@ -94,6 +94,6 @@ info!("account {account_id} sync complete with {count} invoices");
 
 ## Exceptions
 
-- Use plain `println!` or `eprintln!` for intentional user-facing CLI output, not developer logs.
+- Send user-facing CLI output through the command's output path (writer, printer, or table renderer), not developer logs. `print_stdout`/`print_stderr` are warn-level lints enforced in CI; where raw `println!`/`eprintln!` is right (curated help, fatal pre-exit message), annotate the site with `#[expect(clippy::print_stdout, reason = "...")]`.
 - Add more DEBUG detail temporarily while investigating a hard problem, then keep only the durable signal.
 - Use metrics or durable domain events instead of logs when data must drive alerts, billing, audit, or product behavior.

@@ -6,12 +6,12 @@ Use curated workspace lints: start from the Fabro lint shape, tailor project-spe
 
 ## Why
 
-A curated lint set catches real mistakes without making agents satisfy every stylistic Clippy preference. Central policy keeps the baseline consistent, while local `expect` attributes make intentional exceptions auditable.
+A curated lint set catches real mistakes while the allow-list exempts the noisy pedantic lints the project has rejected; everything else is enforced in CI. Central policy keeps the baseline consistent, and local `expect` attributes make intentional exceptions auditable.
 
 ## Do
 
 - Put shared lint policy in the workspace `Cargo.toml`.
-- Run Clippy in CI with `cargo +nightly-2026-04-14 clippy --workspace --all-targets -- -D warnings`.
+- Run Clippy in CI with `cargo +nightly-2026-04-14 clippy --locked --workspace --all-targets -- -D warnings`.
 - Enable `clippy::pedantic` at `warn`, then allow noisy lints the project has rejected.
 - Deny lints that catch correctness or project-boundary violations.
 - Use `#[expect(lint_name, reason = "...")]` for narrow local exceptions.
@@ -26,6 +26,20 @@ A curated lint set catches real mistakes without making agents satisfy every sty
 - Do not hide one-off exceptions in workspace-wide lint config.
 - Do not copy project-specific disallowed methods, types, or environment rules without checking that they match the new codebase.
 - Do not use local lint bypasses for combinator-vs-control-flow idioms; refactor to Clippy's preferred shape or change the workspace lint policy deliberately.
+
+## Lint Levels and CI
+
+CI runs Clippy with `-D warnings`, so the level controls where a violation is caught, not whether it is allowed:
+
+- `deny`: blocks `cargo clippy` and `cargo build` everywhere, including local builds.
+- `warn`: a local warning, but promoted to an error in CI by `-D warnings`.
+- `allow`: the only true exemption; every lint not allowed is enforced in CI.
+
+Justify an intentional violation at the narrowest scope with `#[expect(lint, reason = "...")]`; a bare `#[allow]` is rejected by `allow_attributes_without_reason`. A CLI, for example, keeps `print_stdout = "warn"` and annotates its few real stdout sites:
+
+```rust
+#![expect(clippy::print_stdout, reason = "curated help is written directly to stdout")]
+```
 
 ## Example
 

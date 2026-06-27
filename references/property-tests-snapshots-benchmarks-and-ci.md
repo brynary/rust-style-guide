@@ -42,7 +42,7 @@ Use this as the default CI shape:
 
 ```sh
 cargo +nightly-2026-04-14 fmt --check --all
-cargo +nightly-2026-04-14 clippy --workspace --all-targets -- -D warnings
+cargo +nightly-2026-04-14 clippy --locked --workspace --all-targets -- -D warnings
 cargo nextest run --workspace --all-targets
 ```
 
