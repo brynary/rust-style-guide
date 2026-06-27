@@ -72,6 +72,7 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 - For new Rust project setup, load [workflows/new-rust-project.md](workflows/new-rust-project.md) before individual setup guidelines.
 - For reusable library release verification, load [workflows/reusable-library-release.md](workflows/reusable-library-release.md) before individual release guidelines.
+- For performance investigation, load [workflows/performance-investigation.md](workflows/performance-investigation.md) before individual performance-related guidelines.
 - For public API work, always include public API evolution.
 - For async service work, include logging and observability.
 - For error-handling work, distinguish library errors from application errors before choosing crates.
