@@ -11,6 +11,7 @@ Unit tests give fast feedback around dense logic and invariants. Integration tes
 ## Do
 
 - Test behavior, invariants, and observable state changes instead of private implementation steps.
+- For each nontrivial source file, default to a bottom-of-file `#[cfg(test)] mod tests` covering that file's behavior and private helpers. Integration tests complement these module tests; they do not replace them.
 - Put unit tests in the same module or a nearby test module when they exercise focused domain logic, parsing, validation, or small transformations.
 - Put integration tests under `tests/` when they exercise public APIs, CLI behavior, cross-crate behavior, I/O boundaries, or multi-step workflows.
 - Use module-private tests when they make hard-to-reach invariants clear; prefer public behavior when practical.
@@ -32,6 +33,7 @@ Unit tests give fast feedback around dense logic and invariants. Integration tes
 - Do not add sleeps or timing-dependent tests; use controlled clocks, explicit events, or boundary timeouts.
 - Do not assert only that code "does not panic" when behavior can be checked.
 - Do not introduce broad test-only public APIs.
+- Do not make helpers `pub` only so integration tests can reach them; use module-local tests or expose a real domain API.
 - Do not hide test-only controls in normal library APIs; gate them behind `cfg(test)` or a deliberate `test-util` feature.
 - Do not skip meaningful integration coverage just because unit tests pass.
 

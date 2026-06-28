@@ -16,6 +16,7 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 - Use conservative dependency policy for libraries.
 - Use pragmatic dependency policy for applications when a dependency materially improves clarity or reliability.
 - Prefer mature, maintained crates for domain behavior over small convenience crates.
+- For application CLIs with subcommands, environment-backed options, generated help, or user-facing argument errors, prefer `clap` derive. Hand parsing is only for tiny private binaries with trivial arguments.
 - Keep reusable library features additive and opt-in.
 - Make `serde` optional for reusable libraries unless serialization is core to the crate.
 - Verify reusable library changes with `--all-features` so feature-gated code stays compiled, linted, and tested.

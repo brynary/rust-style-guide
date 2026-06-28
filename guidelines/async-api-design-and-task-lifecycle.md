@@ -20,6 +20,7 @@ Load this page when adding async APIs, spawning Tokio tasks, introducing async t
 - Add `Send + 'static` bounds only when values cross a spawned task, thread, or stored future boundary.
 - Keep spawned futures and task-boundary errors `Send + 'static`; erased errors crossing `tokio::spawn` boundaries need `Send + Sync + 'static`.
 - Spawn tasks from an owner that stores handles, cancellation tokens, and task-specific state.
+- Model long-lived application services, external connections, gateways, pollers, and subscribers as owner structs with `new` and `run`/`shutdown` methods, even when the first version only awaits one client future.
 - Name task owner types by responsibility, such as `Poller`, `WorkerSet`, `TaskGroup`, or `Supervisor`.
 - Store `JoinHandle<Result<(), Error>>` when task failures must be reported.
 - Provide an explicit `shutdown`, `stop`, or `join` method that cancels and awaits owned tasks.
@@ -41,6 +42,8 @@ Load this page when adding async APIs, spawning Tokio tasks, introducing async t
 ## Library vs Application
 
 Applications own runtime setup, task spawning, cancellation, shutdown, and joining. They can provide application-level owners for workers, pollers, subscribers, schedulers, and service task groups.
+
+Use a plain `async fn` for one-shot operations. Use an owner type for long-lived services whose state, lifecycle, or shutdown may grow.
 
 Libraries should normally return awaitable work and let callers spawn it. If a library truly owns background work, return an owner or guard type that makes shutdown observable and reports task failures.
 
