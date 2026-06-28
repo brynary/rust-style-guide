@@ -26,10 +26,11 @@ Load the async guideline when the project is async. Load logging, public API, an
 4. Set Rust 2024 and `rust-version = "1.85"` unless the project already has different constraints.
 5. Add pinned rustfmt configuration and use `nightly-2026-04-14` for formatting.
 6. Add curated workspace lints and tailor project-specific `clippy.toml` guardrails before copying async/blocking disallow rules.
-7. Use `cargo nextest run --workspace --all-targets --all-features` as the normal workspace test runner.
-8. Skip doctests by default; run `cargo test --doc --workspace --all-features` only when the project explicitly opts into maintaining rustdoc examples.
-9. Add dependencies only when they remove real complexity or provide mature domain behavior.
-10. Verify the project with the configured commands before handing it off.
+7. Audit every `src/*.rs` module: classify it as trivial or nontrivial, and add bottom-of-file `#[cfg(test)] mod tests` for each nontrivial file's focused behavior and private helpers. Record a specific exception when a nontrivial file does not get module-local tests.
+8. Use `cargo nextest run --workspace --all-targets --all-features` as the normal workspace test runner.
+9. Skip doctests by default; run `cargo test --doc --workspace --all-features` only when the project explicitly opts into maintaining rustdoc examples.
+10. Add dependencies only when they remove real complexity or provide mature domain behavior.
+11. Verify the project with the configured commands before handing it off.
 
 ## Cargo Baseline
 
@@ -171,3 +172,4 @@ cargo test --doc --workspace --all-features
 - Do not copy Tokio-specific Clippy guardrails into sync projects.
 - Do not create broad preludes, public facades, or feature flags before the project needs them.
 - Do not lower `unsafe_code = "deny"` unless the new crate's purpose requires unsafe code.
+- Do not let integration tests under `tests/` silently replace module-local tests for nontrivial source files.
