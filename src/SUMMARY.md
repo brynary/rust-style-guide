@@ -37,7 +37,6 @@
 # Ownership and Data Flow
 
 - [Ownership, Borrowing, and Clone Policy](guidelines/ownership-borrowing-and-clone-policy.md)
-- [Strings, Slices, and Flexible Parameters](guidelines/strings-slices-and-flexible-parameters.md)
 - [Lifetimes](guidelines/lifetimes.md)
 - [Smart Pointers and Interior Mutability](guidelines/smart-pointers-and-interior-mutability.md)
 - [Collections and Data Structures](guidelines/collections-and-data-structures.md)

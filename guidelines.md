@@ -33,8 +33,7 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 ## Ownership and Data Flow
 
-- [Ownership, borrowing, and clone policy](guidelines/ownership-borrowing-and-clone-policy.md) - load when choosing borrowed inputs, owned outputs, accessors, snapshots, or clone tradeoffs.
-- [Strings, slices, and flexible parameters](guidelines/strings-slices-and-flexible-parameters.md) - load for `String`/`&str`, `Path`/`&Path`, slices, `IntoIterator`, `AsRef`, `Into`, or `Cow`.
+- [Ownership, borrowing, and clone policy](guidelines/ownership-borrowing-and-clone-policy.md) - load when choosing borrowed inputs, owned outputs, `String`/`&str`, `Path` parameters, `IntoIterator`, `AsRef`, `Cow`, accessors, snapshots, or clone tradeoffs.
 - [Lifetimes](guidelines/lifetimes.md) - load when explicit lifetimes, borrowed structs, or lifetime-heavy APIs appear.
 - [Smart pointers and interior mutability](guidelines/smart-pointers-and-interior-mutability.md) - load when choosing `Box`, `Rc`, `Arc`, `Cell`, `RefCell`, locks, or one-time initialization.
 - [Collections and data structures](guidelines/collections-and-data-structures.md) - load when choosing `Vec`, maps, sets, deterministic ordering, capacity, or specialized collection crates.
