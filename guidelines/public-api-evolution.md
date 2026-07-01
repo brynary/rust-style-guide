@@ -14,8 +14,6 @@ Most application code is changed with its callers. Semver ceremony, compatibilit
 - Prefer simple current APIs for application and in-repo code.
 - Accept breaking changes for internal APIs when the callers can be updated in the same change.
 - Use `pub(crate)` for internal boundaries that should not become crate API.
-- Keep fields private by default when the type has invariants.
-- Use public fields for plain DTOs, snapshots, and records with no invariants.
 - Keep published public APIs small and deliberate.
 - For published crates, follow semver, use private fields, and consider `#[non_exhaustive]` where future fields or variants are likely.
 - Add `#[must_use]` to types and methods where silently dropping the value is almost always a bug: builders, RAII guards, and task/owner types that must be shut down or joined.
@@ -27,7 +25,7 @@ Most application code is changed with its callers. Semver ceremony, compatibilit
 - Do not use `#[non_exhaustive]` in internal code just to future-proof ordinary enums or structs.
 - Do not add `#[non_exhaustive]` to an already-published type as a later hardening step; adding it is itself a breaking change because downstream exhaustive matches, struct literals, and tuple-variant construction stop compiling. Apply it when the type is introduced.
 - Do not create broad public facades for modules that are only used inside one application.
-- Do not expose public fields on invariant-bearing types.
+- Do not expose public fields on invariant-bearing types; [struct design](struct-design-and-encapsulation.md) owns the field-visibility policy.
 - Do not leak dependency types through published public APIs unless that dependency is intentionally part of the contract.
 - Do not remove or change published public APIs without treating it as a breaking change.
 - Do not make public traits open for external implementations unless that extension point is intentional.

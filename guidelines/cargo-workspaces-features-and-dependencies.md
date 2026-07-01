@@ -20,7 +20,7 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 - Keep reusable library features additive and opt-in.
 - Make `serde` optional for reusable libraries unless serialization is core to the crate.
 - Verify reusable library changes with `--all-features` so feature-gated code stays compiled, linted, and tested.
-- Check MSRV after adding dependencies or using newly stabilized APIs.
+- Check MSRV after adding dependencies or using newly stabilized APIs; [Rust edition and MSRV](rust-edition-and-msrv.md) owns the MSRV policy and verification command.
 
 ## Avoid
 
@@ -30,7 +30,6 @@ Cargo choices shape compile time, public API, downstream compatibility, binary s
 - Do not make default library features pull in heavy optional integrations.
 - Do not add feature flags before there is a real optional integration.
 - Do not derive serialization for a public type without deciding its wire-format compatibility policy.
-- Do not let dependency updates silently raise the practical MSRV.
 
 ## Library vs Application
 
@@ -78,12 +77,6 @@ rust-version.workspace = true
 anyhow.workspace = true
 tokio = { version = "1", features = ["full"] }
 tracing.workspace = true
-```
-
-Verify MSRV after dependency or API changes:
-
-```sh
-cargo +1.85.0 check --workspace --all-targets --all-features
 ```
 
 ## Exceptions

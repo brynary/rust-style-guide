@@ -23,7 +23,6 @@ Rust structs can protect invariants without inheritance. Private fields let a ty
 - Do not make fields public just to avoid writing constructors or accessors.
 - Do not create method-heavy wrappers around data they do not own.
 - Do not split normal type behavior into unrelated helper modules when methods would be clearer.
-- Do not use traits to emulate base classes or inheritance hierarchies.
 - Do not generate getters and setters for every field by habit.
 - Do not expose test-only mutation paths from production APIs.
 

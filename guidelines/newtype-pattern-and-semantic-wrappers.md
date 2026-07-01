@@ -12,7 +12,7 @@ Newtypes make invalid argument swaps harder, keep validation attached to the val
 
 - Use tuple structs for small semantic wrappers around primitives.
 - Keep newtype fields private when the type has meaning, validation, or future API concerns.
-- Use `new` for infallible wrappers and `try_new` for validated wrappers; reserve `parse` for `FromStr`-backed textual parsing.
+- Use `new` for infallible wrappers and `try_new` for validated wrappers, following [constructors and builders](constructors-and-builders.md).
 - Expose focused accessors such as `as_str`, `as_u64`, or `into_inner`.
 - Derive standard traits when semantics are obvious: `Debug`, `Clone`, `Copy`, `Eq`, `PartialEq`, `Hash`, `PartialOrd`, `Ord` (`Ord` always requires `PartialOrd`).
 - Implement `Display` when the wrapper has a stable user-facing representation.

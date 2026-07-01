@@ -25,7 +25,6 @@ These choices encode different extension models. Enums make known variants expli
 - Do not spread generic type parameters through many layers when a trait object would localize the choice.
 - Do not use `dyn Trait` just to avoid writing a generic parameter.
 - Do not make a public trait object API from a trait that is not object-safe.
-- Do not emulate class inheritance with traits, boxed trait objects, and downcasting.
 
 ## Public API Notes
 

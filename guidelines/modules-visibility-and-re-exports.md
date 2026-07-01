@@ -11,13 +11,12 @@ Rust visibility is an API design tool. Smaller public surfaces make invariants e
 ## Do
 
 - Make modules private unless callers need the module path as part of the API.
-- Keep struct fields private when the type has invariants or behavior.
+- Keep struct fields private by default; [struct design](struct-design-and-encapsulation.md) owns the public-fields-for-plain-data exception.
 - Use `pub(crate)` for real internal boundaries across modules.
 - Use `pub(super)` only for tight parent-child module collaboration.
 - Re-export the public types callers should name from the crate root or a focused facade module.
 - Choose one canonical public path for each local item: either a facade re-export or a public module path.
 - Use `#[doc(inline)]` when re-exporting from a public module or another crate so rustdoc presents the item at the facade path; re-exports from private modules are inlined automatically.
-- Use public fields only for plain data structs with no invariants.
 - Keep internal helper modules behind `mod`, not `pub mod`.
 
 ## Avoid
@@ -25,7 +24,6 @@ Rust visibility is an API design tool. Smaller public surfaces make invariants e
 - Do not expose deep module paths by accident.
 - Do not use `pub` when `pub(crate)` is enough.
 - Do not create a prelude for a small crate.
-- Do not expose fields just to make tests easier.
 - Do not re-export every internal type from the crate root.
 - Do not expose the same local type through both a deep public module and a facade path by accident.
 - Do not make module layout mirror implementation churn in the public API.
@@ -99,5 +97,4 @@ impl Request {
 ## Exceptions
 
 - Use `pub mod` when the module itself is a stable namespace callers should browse or import from.
-- Use public fields for DTOs, config structs, or test fixtures with no invariants.
 - Add a `prelude` only when the crate has many commonly paired traits and types and users benefit from one import.

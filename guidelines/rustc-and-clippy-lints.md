@@ -81,4 +81,3 @@ pub fn new(
 - Use `#[allow]` only when `#[expect]` is unavailable or the lint is intentionally disabled for generated code.
 - Move a lint to workspace config when the project has rejected it as policy, not because one function is inconvenient.
 - Lower or remove `unsafe_code = "deny"` only for crates whose purpose requires unsafe code, then document the local unsafe policy.
-- For crates with documented mutually incompatible feature sets, replace `--all-features` with an explicit feature matrix and document why the features cannot be additive.
