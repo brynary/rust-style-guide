@@ -31,7 +31,7 @@ WORKFLOW_SECTIONS = (
 )
 
 ROUTER_SECTIONS = {
-    "SKILL.md": ("## First Steps", "## Routing Examples", "## Core Behavior"),
+    "SKILL.md": ("## First Steps",),
     "root.md": ("## Supporting Files", "## Routing Examples", "## Core Behavior"),
 }
 

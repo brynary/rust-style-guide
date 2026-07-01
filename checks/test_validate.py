@@ -78,18 +78,8 @@ name: example
 
 ## First Steps
 
-Load [root.md](root.md).
-
-## Routing Examples
-
-| Task | Load |
-| --- | --- |
-| Topic | [Topic](guidelines/topic.md) |
-| Workflow | [Workflow](workflows/workflow.md) |
-
-## Core Behavior
-
-- Use the guide.
+1. Load [root.md](root.md).
+2. For workflow tasks, load [workflow](workflows/workflow.md).
 """
 
 
