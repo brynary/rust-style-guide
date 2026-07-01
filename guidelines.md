@@ -35,7 +35,7 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 - [Ownership, borrowing, and clone policy](guidelines/ownership-borrowing-and-clone-policy.md) - load when choosing borrowed inputs, owned outputs, `String`/`&str`, `Path` parameters, `IntoIterator`, `AsRef`, `Cow`, accessors, snapshots, or clone tradeoffs.
 - [Lifetimes](guidelines/lifetimes.md) - load when explicit lifetimes, borrowed structs, or lifetime-heavy APIs appear.
-- [Smart pointers and interior mutability](guidelines/smart-pointers-and-interior-mutability.md) - load when choosing `Box`, `Rc`, `Arc`, `Cell`, `RefCell`, locks, or one-time initialization.
+- [Smart pointers and interior mutability](guidelines/smart-pointers-and-interior-mutability.md) - load when choosing `Box`, `Rc`, `Cell`, `RefCell`, `Weak`, or one-time initialization.
 - [Collections and data structures](guidelines/collections-and-data-structures.md) - load when choosing `Vec`, maps, sets, deterministic ordering, capacity, or specialized collection crates.
 
 ## Errors, Safety, and Diagnostics
@@ -52,7 +52,7 @@ Guideline pages are policy. Do not load every guideline page by default.
 - [Async runtime and when to use async](guidelines/async-runtime-and-when-to-use-async.md) - load when deciding sync vs async posture, Tokio use, or runtime boundaries.
 - [Async API design and task lifecycle](guidelines/async-api-design-and-task-lifecycle.md) - load when adding async APIs, async traits, spawning, task owners, `Send`, or shutdown handles.
 - [Cancellation, shutdown, and blocking work](guidelines/cancellation-shutdown-and-blocking-work.md) - load for cancellation tokens, `select!`, timeouts, `spawn_blocking`, CPU work, or graceful shutdown.
-- [Concurrency primitives](guidelines/concurrency-primitives.md) - load when adding channels, locks, atomics, shared state, worker pools, or blocking APIs on async paths.
+- [Concurrency primitives](guidelines/concurrency-primitives.md) - load when adding channels, locks, atomics, `Arc` shared state, worker pools, or blocking APIs on async paths.
 
 ## Everyday Implementation
 

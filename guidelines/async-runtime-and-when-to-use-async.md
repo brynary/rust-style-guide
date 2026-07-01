@@ -28,7 +28,7 @@ Load this page when choosing or reviewing a project's sync-vs-async posture or w
 
 - Do not convert a module to async only because the caller is async.
 - Do not hide runtime creation inside a reusable library.
-- Do not call blocking I/O, long CPU work, or long-held or contended locks directly on Tokio worker threads; short `std::sync` critical sections are fine.
+- Do not put blocking I/O or long CPU work directly on Tokio worker threads; [cancellation, shutdown, and blocking work](cancellation-shutdown-and-blocking-work.md) owns the isolation rules.
 - Do not add runtime-agnostic abstraction after the project has explicitly chosen Tokio and no caller needs another runtime.
 - Do not expose async APIs from a library without documenting runtime assumptions.
 - Do not maintain parallel sync and async APIs unless both are real project requirements.

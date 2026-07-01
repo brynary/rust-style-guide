@@ -136,3 +136,4 @@ client.upload(bytes).await?;
 - Use `std::sync::RwLock` or `tokio::sync::RwLock` when measured or obvious read contention justifies it.
 - Use dedicated OS threads for blocking APIs that require thread affinity or long-lived blocking ownership, with a local `#[expect]` reason if lints disallow it.
 - Use unbounded channels only for naturally bounded streams or explicit best-effort telemetry paths.
+- Use channels even for same-thread code when ownership transfer makes control flow clearer.

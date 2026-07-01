@@ -16,7 +16,7 @@ Load this page when adding long-lived async loops, graceful shutdown, timeouts, 
 
 - Pass an explicit shutdown signal, usually a cancellation token, into long-lived tasks.
 - Use `select!` in service loops to race normal work with shutdown.
-- Join owned tasks during shutdown and surface task errors.
+- Join owned tasks during shutdown and surface task errors; task owners and handles are defined on [async API design and task lifecycle](async-api-design-and-task-lifecycle.md).
 - Put timeouts at operation boundaries: external calls, subprocesses, requests, jobs, and shutdown phases.
 - Keep inner helper functions timeout-free unless they own a real operation boundary.
 - Make cancellable sections idempotent or restartable when an `.await` can interrupt progress.
@@ -32,7 +32,6 @@ Load this page when adding long-lived async loops, graceful shutdown, timeouts, 
 - Do not rely on dropping a future as the only shutdown mechanism for important work.
 - Do not call blocking I/O, `std::thread::sleep`, or long CPU work directly on Tokio worker threads.
 - Do not add `timeout` around every small helper call.
-- Do not ignore `JoinHandle` errors during shutdown.
 - Do not use `abort` as the normal shutdown path for tasks that need cleanup.
 - Do not hold a lock guard across `.await` unless the design explicitly requires an async lock.
 - Do not put non-cancel-safe work directly in a `select!` branch without owning the state needed to resume or retry it.
