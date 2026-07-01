@@ -2,83 +2,49 @@
 
 ## Rule
 
-Identify the code context first: write reusable libraries with stable, caller-controlled APIs, and write applications, services, CLIs, and tests with more concrete operational choices.
+Identify the code context first: reusable library, shared in-repo crate, application or service, CLI, or test code. Libraries optimize for stable, caller-controlled APIs; applications, CLIs, and tests optimize for delivery and local clarity.
 
 ## Why
 
-Library choices become another crate's constraints. Application choices optimize for delivery, observability, deployment, and local clarity.
+Library choices become another crate's constraints, while application choices optimize for delivery, observability, and deployment. Most policies in this guide split on this classification, so classifying wrong applies the wrong half of every other page.
 
 ## Do
 
-- Treat public library APIs as long-lived contracts.
-- Use typed public library errors, usually with `thiserror`.
-- Use `anyhow` for internal application and CLI top-level error plumbing.
-- Use `miette` when a CLI needs rich user-facing diagnostics.
-- Document each project's sync vs async posture explicitly; use Tokio when the project chooses async.
-- Use `tracing` for instrumentation across libraries and applications.
-- Let applications install `tracing` subscribers, configure filters, spawn tasks, and own shutdown.
-- Keep typed domain errors inside applications when code needs to branch on failures.
+- Classify code before choosing policies: published or reusable library, shared in-repo workspace crate, application or service, CLI, or test support.
+- Treat public library APIs as long-lived contracts; treat application internals as freely refactorable with their callers.
+- Follow the owner page for each policy that splits by context:
+  - Errors: typed `thiserror` errors at library boundaries, `anyhow` inside applications; see [library errors vs application errors](library-errors-vs-application-errors.md).
+  - Instrumentation: libraries emit `tracing` events, applications own subscriber setup; see [logging and observability](logging-and-observability.md).
+  - Async: applications own the runtime, spawned tasks, and shutdown; see [async runtime](async-runtime-and-when-to-use-async.md) and [task lifecycle](async-api-design-and-task-lifecycle.md).
+  - Dependencies and features: conservative for libraries, pragmatic for applications; see [Cargo, workspaces, features, and dependencies](cargo-workspaces-features-and-dependencies.md).
+  - API evolution: semver care only for externally consumed code; see [public API evolution](public-api-evolution.md).
 
 ## Avoid
 
-- Do not expose `anyhow::Error` from reusable public library APIs.
-- Do not make a library install a global tracing subscriber.
-- Do not hide Tokio task ownership, cancellation, or shutdown inside a library API.
 - Do not force library-level abstraction into application code when one concrete type is enough.
 - Do not over-model one-off CLI failure paths with large public error enums.
+- Do not apply application shortcuts, such as global process setup or `anyhow` in signatures, to reusable library boundaries.
+- Do not treat shared in-repo crates as published libraries; they follow application rules until something outside the repo consumes them independently.
 
 ## Library vs Application
 
-Library code should protect caller choice where it affects API stability: typed errors, careful dependency exposure, documented runtime assumptions, and no global process setup.
+Library code protects caller choice where it affects API stability: typed errors, careful dependency exposure, documented runtime assumptions, and no global process setup.
 
-Application and CLI code may choose concrete dependencies directly: `anyhow` at boundaries, documented Tokio runtime setup when async is chosen, `tracing_subscriber` initialization, and pragmatic startup validation.
+Application and CLI code chooses concrete dependencies directly and owns process-wide setup: runtime, subscribers, configuration, and shutdown.
 
 ## Example
 
-Library API:
+The same operation, classified two ways:
 
 ```rust
-use thiserror::Error;
-use tracing::instrument;
-
-#[derive(Debug, Error)]
-pub enum ClientError {
-    #[error("request failed")]
-    Request(#[from] reqwest::Error),
-
-    #[error("user {user_id} was not found")]
-    NotFound { user_id: UserId },
+// Reusable library boundary: typed error, no process-wide assumptions.
+pub fn parse_manifest(source: &str) -> Result<Manifest, ManifestError> {
+    todo!()
 }
 
-#[instrument(skip(client), fields(user_id = %user_id))]
-pub async fn fetch_user(client: &reqwest::Client, user_id: UserId) -> Result<User, ClientError> {
-    let response = client.get(user_url(user_id)).send().await?;
-
-    if response.status() == reqwest::StatusCode::NOT_FOUND {
-        return Err(ClientError::NotFound { user_id });
-    }
-
-    let response = response.error_for_status()?;
-
-    Ok(response.json().await?)
-}
-```
-
-Application boundary:
-
-```rust
-use anyhow::{Context, Result};
-
-#[tokio::main]
-async fn main() -> Result<()> {
-    tracing_subscriber::fmt()
-        .with_env_filter("info")
-        .init();
-
-    let config = Config::load("app.toml").context("failed to load application config")?;
-    let client = reqwest::Client::new();
-
-    run_service(config, client).await.context("service failed")
+// Application command handler: concrete choices, anyhow at the boundary.
+pub async fn run_deploy(args: DeployArgs) -> anyhow::Result<()> {
+    todo!()
 }
 ```
 
