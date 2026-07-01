@@ -15,8 +15,7 @@ Error values are structured control-flow and diagnostics. Turning errors into st
 - Keep useful fields on error variants, such as IDs, paths, states, retry hints, and safe context values.
 - Convert lower-layer errors into the current layer's error type at crate, domain, service, command, or API boundaries.
 - Add context at layer crossings so operators can tell which operation failed.
-- Preserve `source()` chains until a rendering boundary.
-- When a boundary should show the full cause chain, walk `source()` explicitly; do not assume typed error `Display` includes every source.
+- Preserve `source()` chains until a rendering boundary; [error propagation](error-propagation-context-and-messages.md) owns how to render the chain.
 - Render to `String` only for CLI output, API response details, logs, telemetry, serialized files, or external contracts that require text.
 - For public API responses, log the internal chain but return a curated safe message.
 
@@ -25,8 +24,7 @@ Error values are structured control-flow and diagnostics. Turning errors into st
 - Do not add enum variants for every low-level failure unless callers branch on them.
 - Do not expose database, HTTP, SDK, or parser errors from a public domain API unless that dependency is intentionally part of the contract.
 - Do not transport internal errors as `String`, `Message(String)`, or `Other(String)` just because the real error type is inconvenient.
-- Do not write `.map_err(|err| err.to_string())` for real error propagation.
-- Do not create a new error with `format!("{err}")` or `anyhow!("{err}")`; that renders the cause and drops the source chain.
+- Do not stringify errors during propagation; the `.map_err(to_string)` and `anyhow!("{err}")` bans live on [error propagation](error-propagation-context-and-messages.md).
 - Do not include secrets, tokens, raw URLs with credentials, or unredacted request bodies in error fields or display messages.
 
 ## Library vs Application

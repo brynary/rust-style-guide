@@ -28,9 +28,8 @@ Library callers need stable types they can inspect and branch on. Applications u
 - Do not use `miette` as a general internal application error type.
 - Do not mix `anyhow` and `eyre` in the same application without a project-level reason.
 - Do not make `Box<dyn std::error::Error>` the default public error strategy.
-- Do not leak database, HTTP, SDK, or parser error types from a public API unless they are intentionally part of the contract.
+- Do not leak dependency error types from public APIs or stringify errors between layers; [error taxonomy](error-taxonomy-and-layer-boundaries.md) and [error propagation](error-propagation-context-and-messages.md) own those rules.
 - Do not create public variants only to mirror each dependency error.
-- Do not convert errors to `String` to cross internal crate boundaries.
 
 ## Public API Notes
 
@@ -89,20 +88,7 @@ pub fn load_config(path: &std::path::Path) -> Result<Config> {
 }
 ```
 
-Application boundary:
-
-```rust
-use anyhow::{Context, Result};
-
-fn run() -> Result<()> {
-    let path = std::path::PathBuf::from("config.toml");
-    let config = config_lib::load_config(&path)
-        .with_context(|| format!("failed to load {}", path.display()))?;
-
-    start_server(config).context("failed to start server")?;
-    Ok(())
-}
-```
+For the application-boundary side (`anyhow` context over a typed library error), see the example on [error propagation, context, and messages](error-propagation-context-and-messages.md).
 
 ## Exceptions
 
