@@ -37,6 +37,13 @@ hyperfine 'target/release/app input.txt'
 cargo flamegraph --bench parser
 ```
 
+Profilers need debug symbols to produce readable stacks; before capturing flamegraphs, enable debuginfo in the profiled release or bench profile (or a dedicated profiling profile):
+
+```toml
+[profile.release]
+debug = true
+```
+
 For async services, prefer production-like tracing, metrics, load tests, and Tokio task/lock visibility over isolated microbenchmarks when the problem is scheduling or contention.
 
 ## Avoid

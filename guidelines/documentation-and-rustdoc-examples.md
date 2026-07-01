@@ -37,6 +37,8 @@ For reusable libraries, prioritize docs on public concepts, constructors, fallib
 ## Example
 
 ```rust
+use std::path::Path;
+
 /// Loads application configuration from a TOML file.
 ///
 /// Environment-specific overrides are applied after the file is parsed.
@@ -48,7 +50,7 @@ For reusable libraries, prioritize docs on public concepts, constructors, fallib
 ///
 /// # Examples
 ///
-/// ```
+/// ```rust,no_run
 /// # use example_config::Config;
 /// # fn main() -> Result<(), Box<dyn std::error::Error>> {
 /// let config = Config::load("app.toml")?;
@@ -56,7 +58,7 @@ For reusable libraries, prioritize docs on public concepts, constructors, fallib
 /// # Ok(())
 /// # }
 /// ```
-pub fn load(path: impl AsRef<std::path::Path>) -> Result<Config, ConfigError> {
+pub fn load(path: impl AsRef<Path>) -> Result<Config, ConfigError> {
     todo!()
 }
 ```
@@ -74,6 +76,6 @@ Use `expect` only for setup invariants that are part of the example:
 
 ## Exceptions
 
-- Use `no_run` for examples that should compile but would start servers, make network calls, or mutate real state.
+- Use `no_run` for examples that should compile but would start servers, make network calls, or read or mutate real state.
 - Use `ignore` only when an example cannot be made portable.
 - Use `expect` in examples for fixed fixtures or impossible setup failures when a fallible `main` would obscure the API being shown.

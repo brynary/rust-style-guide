@@ -25,6 +25,7 @@ Most application code is changed with its callers. Semver ceremony, compatibilit
 
 - Do not add semver compatibility shims for purely internal application code.
 - Do not use `#[non_exhaustive]` in internal code just to future-proof ordinary enums or structs.
+- Do not add `#[non_exhaustive]` to an already-published type as a later hardening step; adding it is itself a breaking change because downstream exhaustive matches, struct literals, and tuple-variant construction stop compiling. Apply it when the type is introduced.
 - Do not create broad public facades for modules that are only used inside one application.
 - Do not expose public fields on invariant-bearing types.
 - Do not leak dependency types through published public APIs unless that dependency is intentionally part of the contract.
@@ -43,7 +44,7 @@ Published crates and externally consumed APIs should optimize for compatibility.
 Mark types and methods with `#[must_use]` when ignoring the returned value is almost always a mistake. This turns a silent bug into a compile-time warning at the call site.
 
 - Use it on builders, RAII guards, and async task owners such as a `Poller` or `WorkerSet` that callers must shut down or join.
-- Use it on pure methods whose only purpose is to return a value.
+- Use it where discarding the value is almost certainly a bug: builders, guards, handles, and fallible or lazily-effective operations, not ordinary accessors.
 - `Result` and `Option` are already `#[must_use]`, so the value comes from your own types.
 - Apply it deliberately rather than enabling `clippy::must_use_candidate`, which is noisy.
 

@@ -29,14 +29,6 @@ Rust supports data with behavior without inheritance. Clear types, ownership, an
 - Do not write clever iterator chains when a loop communicates the intent better.
 - Do not choose pattern names over Rust's simpler type, module, and ownership tools.
 
-## Exceptions
-
-- Use free functions only for module-private helpers or operations with no natural receiver type. If a helper must be public, first ask whether it should be a method or value type.
-- Keep domain behavior on the type that owns the data or invariant.
-- Use iterator chains only for simple transforms; prefer methods and loops for domain logic, branching, mutation, fallible steps, or multi-step logic.
-- Use plain data structs when the fields are the API and there are no invariants to protect.
-- Introduce traits only when callers need substitution, testing seams, or extension by downstream code.
-
 ## Example
 
 ```rust
@@ -61,6 +53,13 @@ pub struct CartItem {
 }
 
 impl CartItem {
+    pub fn new(price: Money, requires_shipping: bool) -> Self {
+        Self {
+            price,
+            requires_shipping,
+        }
+    }
+
     pub fn price(&self) -> Money {
         self.price
     }
@@ -89,11 +88,15 @@ impl Cart {
         Some(total)
     }
 
-    pub fn shippable_items(&self) -> Vec<&CartItem> {
-        self.items
-            .iter()
-            .filter(|item| item.requires_shipping())
-            .collect()
+    pub fn shippable_items(&self) -> impl Iterator<Item = &CartItem> {
+        self.items.iter().filter(|item| item.requires_shipping())
     }
 }
 ```
+
+## Exceptions
+
+- Use free functions for pure algorithms or cross-type operations with no natural receiver; if a helper must be public, first ask whether it should be a method or a value type.
+- Use plain data structs with public fields when the fields are the API and there are no invariants to protect.
+- Prefer a functional pipeline over methods when a transformation chain is genuinely clearer than stateful updates.
+- Introduce a trait before a second implementation exists only when callers need substitution or a testing seam now.

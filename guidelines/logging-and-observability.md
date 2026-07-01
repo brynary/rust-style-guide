@@ -12,6 +12,7 @@ Structured traces make logs searchable, aggregatable, and useful after the fact.
 
 - Use `tracing` everywhere; applications configure subscribers and libraries only emit spans and events.
 - Add spans around meaningful operations such as requests, jobs, commands, tasks, external calls, and workflow steps.
+- Prefer `#[tracing::instrument(skip_all, fields(...))]` for function-shaped spans, opting fields in explicitly.
 - Attach structured fields for IDs, names, states, attempts, counts, durations, and safe error summaries.
 - Use fixed message strings; put variable data in fields.
 - Write log messages in lowercase with no trailing period, matching the style of error `Display` and `anyhow` context messages.
@@ -20,6 +21,7 @@ Structured traces make logs searchable, aggregatable, and useful after the fact.
 - Use WARN for degraded behavior or retryable unexpected conditions.
 - Use ERROR when the current operation failed and cannot continue.
 - Log errors in an `error` field and render or collect full cause chains deliberately at boundaries that need them.
+- Record error values with Debug capture (`?err`) or a `&dyn Error` field so source chains stay visible; Display capture (`%err`) prints only the top-level message and drops the chain.
 - Use snake_case field names consistently across the codebase.
 - Prefer counts, byte lengths, hashes, redacted displays, or booleans over raw sensitive values.
 
@@ -32,6 +34,7 @@ Structured traces make logs searchable, aggregatable, and useful after the fact.
 - Do not configure a subscriber inside reusable libraries.
 - Do not use tracing events as user-facing CLI or API output.
 - Do not log secrets, API keys, bearer tokens, cookies, raw credentials, unredacted URLs, raw command output, or request bodies.
+- Do not use bare `#[instrument]` on functions that take configs or credentials; it records every argument via Debug.
 - Do not rely on logs for behavior that should be represented as durable events, metrics, or user-visible output.
 
 ## Library vs Application
@@ -76,7 +79,7 @@ pub async fn sync_account(account_id: AccountId, client: &BillingClient) -> Resu
 }
 
 pub fn log_sync_failure(account_id: AccountId, error: &SyncError) {
-    error!(account_id = %account_id, error = %error, "account sync failed");
+    error!(account_id = %account_id, error = ?error, "account sync failed");
 }
 ```
 

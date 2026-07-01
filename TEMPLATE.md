@@ -23,13 +23,13 @@ Short rationale.
 - Common anti-patterns.
 - Cases where agents usually overreach.
 
-## Exceptions
-
-Narrow cases where the default can be broken.
-
 ## Example
 
 Small preferred example.
+
+## Exceptions
+
+Narrow cases where the default can be broken.
 ```
 
 Optional sections:

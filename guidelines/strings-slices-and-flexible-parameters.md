@@ -14,7 +14,7 @@ Accept concrete borrowed string, slice, and path parameters by default; store ow
 - Accept `&[T]` instead of `&Vec<T>` for read-only sequences.
 - Accept `&Path` instead of `&PathBuf` for read-only paths.
 - Store owned `String`, `Vec<T>`, and `PathBuf` inside structs.
-- Clone, `to_owned`, `to_vec`, or `to_path_buf` at the boundary when storing borrowed inputs.
+- Take owned values (or `impl Into`) for parameters stored unchanged; clone, `to_owned`, `to_vec`, or `to_path_buf` at the boundary when storing a normalized or derived value from borrowed input.
 - Return owned snapshots when callers need stable data independent of the owner.
 - Use `IntoIterator` for APIs whose purpose is to consume or extend from a sequence of items.
 - Use `AsRef<str>` or `AsRef<Path>` only when caller flexibility clearly helps and the bound stays local.
@@ -41,10 +41,8 @@ For application internals, prefer the simplest signature and clone at the bounda
 ## Example
 
 ```rust
-use std::{
-    borrow::Cow,
-    path::{Path, PathBuf},
-};
+use std::borrow::Cow;
+use std::path::{Path, PathBuf};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct FileMatcher {
@@ -53,14 +51,11 @@ pub struct FileMatcher {
 }
 
 impl FileMatcher {
-    pub fn new(root: &Path, extensions: &[String]) -> Self {
-        Self {
-            root:       root.to_path_buf(),
-            extensions: extensions.to_vec(),
-        }
+    pub fn new(root: PathBuf, extensions: &[String]) -> Self {
+        Self::from_extensions(root, extensions)
     }
 
-    pub fn from_extensions<I, S>(root: &Path, extensions: I) -> Self
+    pub fn from_extensions<I, S>(root: PathBuf, extensions: I) -> Self
     where
         I: IntoIterator<Item = S>,
         S: AsRef<str>,
@@ -70,10 +65,7 @@ impl FileMatcher {
             .map(|extension| normalize_extension(extension.as_ref()).into_owned())
             .collect();
 
-        Self {
-            root: root.to_path_buf(),
-            extensions,
-        }
+        Self { root, extensions }
     }
 
     pub fn add_extension(&mut self, extension: &str) {
@@ -101,7 +93,7 @@ impl FileMatcher {
         &self.extensions
     }
 
-    pub fn extension_names(&self) -> Vec<String> {
+    pub fn extensions_snapshot(&self) -> Vec<String> {
         self.extensions.clone()
     }
 }
@@ -110,10 +102,10 @@ pub fn normalize_extension(extension: &str) -> Cow<'_, str> {
     let trimmed = extension.trim();
     let normalized = trimmed.strip_prefix('.').unwrap_or(trimmed);
 
-    if normalized.len() == extension.len() {
-        Cow::Borrowed(extension)
+    if normalized.chars().any(|character| character.is_ascii_uppercase()) {
+        Cow::Owned(normalized.to_ascii_lowercase())
     } else {
-        Cow::Owned(normalized.to_owned())
+        Cow::Borrowed(normalized)
     }
 }
 ```

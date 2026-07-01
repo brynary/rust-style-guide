@@ -12,9 +12,9 @@ Newtypes make invalid argument swaps harder, keep validation attached to the val
 
 - Use tuple structs for small semantic wrappers around primitives.
 - Keep newtype fields private when the type has meaning, validation, or future API concerns.
-- Use `new` for infallible wrappers and `try_new` or `parse` for validated wrappers.
+- Use `new` for infallible wrappers and `try_new` for validated wrappers; reserve `parse` for `FromStr`-backed textual parsing.
 - Expose focused accessors such as `as_str`, `as_u64`, or `into_inner`.
-- Derive standard traits when semantics are obvious: `Debug`, `Clone`, `Copy`, `Eq`, `PartialEq`, `Hash`, `Ord`.
+- Derive standard traits when semantics are obvious: `Debug`, `Clone`, `Copy`, `Eq`, `PartialEq`, `Hash`, `PartialOrd`, `Ord` (`Ord` always requires `PartialOrd`).
 - Implement `Display` when the wrapper has a stable user-facing representation.
 - Use `From` only for conversions that cannot fail or violate invariants.
 - Use `TryFrom` or `FromStr` for validated conversions.
@@ -38,7 +38,8 @@ For application internals, prefer newtypes at boundaries, identifiers, units, an
 ## Example
 
 ```rust
-use std::{fmt, str::FromStr};
+use std::fmt;
+use std::str::FromStr;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct UserId(u64);

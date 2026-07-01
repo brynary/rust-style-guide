@@ -65,11 +65,13 @@ pub fn plan_action(request: Request) -> Result<Action, Error> {
 Use combinators for simple local transformations:
 
 ```rust
-pub fn display_name(user: &User) -> String {
-    user.nickname()
-        .filter(|name| !name.is_empty())
-        .unwrap_or_else(|| user.username())
-        .to_owned()
+impl User {
+    pub fn display_name(&self) -> String {
+        self.nickname()
+            .filter(|name| !name.is_empty())
+            .unwrap_or_else(|| self.username())
+            .to_owned()
+    }
 }
 ```
 

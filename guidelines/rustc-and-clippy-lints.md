@@ -2,7 +2,7 @@
 
 ## Rule
 
-Use curated workspace lints: start from the Fabro lint shape, tailor project-specific denies, and require justified local exceptions with `#[expect(..., reason = "...")]`.
+Use curated workspace lints: start from the workspace lint tables in the [new project workflow](../workflows/new-rust-project.md), tailor project-specific denies, and require justified local exceptions with `#[expect(..., reason = "...")]`.
 
 ## Why
 
@@ -15,7 +15,7 @@ A curated lint set catches real mistakes while the allow-list exempts the noisy 
 - Enable `clippy::pedantic` at `warn`, then allow noisy lints the project has rejected.
 - Deny lints that catch correctness or project-boundary violations.
 - Use `#[expect(lint_name, reason = "...")]` for narrow local exceptions.
-- Review Fabro's `disallowed_methods` and `disallowed_types` before copying them; these should reflect the target project's architecture.
+- Review the baseline `disallowed_methods` and `disallowed_types` in the [new project workflow](../workflows/new-rust-project.md) before copying them; these should reflect the target project's architecture.
 - Put architecture-specific Clippy settings in `clippy.toml`.
 
 ## Avoid
@@ -31,14 +31,17 @@ A curated lint set catches real mistakes while the allow-list exempts the noisy 
 
 CI runs Clippy with `-D warnings`, so the level controls where a violation is caught, not whether it is allowed:
 
-- `deny`: blocks `cargo clippy` and `cargo build` everywhere, including local builds.
+- `deny`: denied rustc lints fail `cargo build` everywhere, including local builds; denied Clippy lints fail only `cargo clippy`, so the Clippy run, locally and in CI, is what enforces them.
 - `warn`: a local warning, but promoted to an error in CI by `-D warnings`.
 - `allow`: the only true exemption; every lint not allowed is enforced in CI.
 
-Justify an intentional violation at the narrowest scope with `#[expect(lint, reason = "...")]`; a bare `#[allow]` is rejected by `allow_attributes_without_reason`. A CLI, for example, keeps `print_stdout = "warn"` and annotates its few real stdout sites:
+Justify an intentional violation at the narrowest scope with `#[expect(lint, reason = "...")]`; a bare `#[allow]` is rejected by `allow_attributes_without_reason`. A CLI, for example, keeps `print_stdout = "warn"` and annotates each of its few real stdout functions:
 
 ```rust
-#![expect(clippy::print_stdout, reason = "curated help is written directly to stdout")]
+#[expect(clippy::print_stdout, reason = "curated help is written directly to stdout")]
+fn print_help() {
+    println!("usage: app <command> [options]");
+}
 ```
 
 ## Example
@@ -54,6 +57,7 @@ pub fn new(
     id: RunId,
     parent_id: Option<RunId>,
     status: RunStatus,
+    attempt: AttemptNumber,
     started_at: Timestamp,
     finished_at: Option<Timestamp>,
     labels: Labels,
@@ -63,6 +67,7 @@ pub fn new(
         id,
         parent_id,
         status,
+        attempt,
         started_at,
         finished_at,
         labels,

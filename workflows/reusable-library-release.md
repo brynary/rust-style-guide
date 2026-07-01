@@ -24,13 +24,16 @@ Also load error, documentation, unsafe, async, or observability guidelines when 
 4. Run the default all-features verification commands.
 5. Run dependency and supply-chain checks when the project has the tools installed.
 6. Verify out-of-box behavior for the default feature set.
-7. Record any MSRV bump, public API break, new optional dependency, or feature behavior change in release notes or the changelog.
+7. For published crates, run `cargo semver-checks` to detect accidental public API breaks and `cargo publish --dry-run` to validate the release artifact.
+8. Record any MSRV bump, public API break, new optional dependency, or feature behavior change in release notes or the changelog.
 
 ## Default Verification
 
 Use these commands before releasing a reusable library:
 
 Use `--workspace` when verifying every library crate in the workspace. When releasing one crate from a mixed workspace, replace `--workspace` with `-p crate-name`.
+
+Run the MSRV check with the crate's declared `rust-version` from step 1; `+1.85.0` below is illustrative, so a crate that declares `rust-version = "1.78"` is verified with `cargo +1.78.0 check`.
 
 ```sh
 cargo +nightly-2026-04-14 fmt --check --all
@@ -72,6 +75,17 @@ cargo machete
 ```
 
 Treat these as release gates for published crates when the project has adopted them. For internal libraries, use them when dependency churn, public dependency exposure, or supply-chain risk is material.
+
+## Semver and Artifact Checks
+
+For published crates, detect accidental public API breaks and validate the release artifact:
+
+```sh
+cargo semver-checks
+cargo publish --dry-run
+```
+
+Install the checker once with `cargo install cargo-semver-checks --locked`. Use `cargo package` instead of the dry-run publish when the crate is not published to a registry. Treat any semver-major finding as either a bug to fix or an intentional break to record in step 8.
 
 ## Out-of-Box Build
 

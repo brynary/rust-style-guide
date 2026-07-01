@@ -6,7 +6,7 @@ Return `Result` for recoverable failures; panic only for violated invariants or 
 
 ## Why
 
-Panics abort the current task instead of giving callers a recovery path. They are appropriate when the program has reached a state that means the code is wrong, not when input, I/O, network, parsing, or configuration can fail normally.
+Panics unwind by default; a panicking Tokio task surfaces as a `JoinError` at the join point, and under `panic = "abort"` the process dies. Either way, panics give callers no structured recovery path for expected failures, so they are appropriate when the program has reached a state that means the code is wrong, not when input, I/O, network, parsing, or configuration can fail normally.
 
 ## Do
 

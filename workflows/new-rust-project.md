@@ -26,7 +26,7 @@ Load the async guideline when the project is async. Load logging, public API, an
 4. Set Rust 2024 and `rust-version = "1.85"` unless the project already has different constraints.
 5. Add pinned rustfmt configuration and use `nightly-2026-04-14` for formatting.
 6. Add curated workspace lints and tailor project-specific `clippy.toml` guardrails before copying async/blocking disallow rules.
-7. Audit every `src/*.rs` module: classify it as trivial or nontrivial, and add bottom-of-file `#[cfg(test)] mod tests` for each nontrivial file's focused behavior and private helpers. Record a specific exception when a nontrivial file does not get module-local tests.
+7. Audit every Rust source file under `src/`, including nested modules: classify it as trivial or nontrivial, and add bottom-of-file `#[cfg(test)] mod tests` for each nontrivial file's focused behavior and private helpers. Record a specific exception when a nontrivial file does not get module-local tests.
 8. Use `cargo nextest run --workspace --all-targets --all-features` as the normal workspace test runner.
 9. Skip doctests by default; run `cargo test --doc --workspace --all-features` only when the project explicitly opts into maintaining rustdoc examples.
 10. Add dependencies only when they remove real complexity or provide mature domain behavior.
@@ -39,7 +39,7 @@ Use a workspace shape when the project is likely to grow beyond one crate:
 ```toml
 [workspace]
 members = ["crates/*"]
-resolver = "2"
+resolver = "3"
 
 [workspace.package]
 edition = "2024"
@@ -88,7 +88,19 @@ wildcard_imports = "warn"
 absolute_paths = "warn"
 ```
 
-For a single crate, put the same package fields and lint tables in the crate's `Cargo.toml` instead of a workspace root.
+Workspace lint inheritance is opt-in per member crate: every member crate must set `[lints] workspace = true` in its own `Cargo.toml`, or the workspace lint tables do nothing.
+
+```toml
+[package]
+name = "example-crate"
+edition.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+```
+
+For a single crate, put the same package fields and lint tables in the crate's `Cargo.toml` instead of a workspace root, renaming the tables to `[lints.rust]` and `[lints.clippy]`; copied `[workspace.lints.*]` tables do nothing in a standalone manifest.
 
 For async projects, add Tokio deliberately to the package or workspace dependencies:
 
@@ -122,10 +134,12 @@ struct_field_align_threshold = 20
 enum_discrim_align_threshold = 20
 ```
 
-Install the pinned formatter:
+Install the pinned formatter, the MSRV toolchain, and the test runner used by the verification commands:
 
 ```sh
 rustup toolchain install nightly-2026-04-14 --profile minimal --component rustfmt
+rustup toolchain install 1.85.0 --profile minimal
+cargo install cargo-nextest --locked
 ```
 
 ## Optional Clippy Guardrails

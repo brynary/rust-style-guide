@@ -37,15 +37,19 @@ Load this page when adding long-lived async loops, graceful shutdown, timeouts, 
 - Do not hold a lock guard across `.await` unless the design explicitly requires an async lock.
 - Do not put non-cancel-safe work directly in a `select!` branch without owning the state needed to resume or retry it.
 - Do not assume `spawn_blocking` makes unlimited CPU work cheap; it still needs backpressure.
+- Do not expect `spawn_blocking` closures to be cancelled once started; cancellation tokens and `abort` do not interrupt them, and runtime shutdown waits for them, so keep blocking sections short or chunked with cancellation checks between chunks.
 
 ## Example
 
 Race work with shutdown, place the timeout around the external operation, and isolate blocking work:
 
 ```rust
-use std::{path::PathBuf, time::Duration};
+use std::path::PathBuf;
+use std::time::Duration;
 
-use tokio::{select, sync::mpsc, task, time::timeout};
+use tokio::sync::mpsc;
+use tokio::time::timeout;
+use tokio::{select, task};
 use tokio_util::sync::CancellationToken;
 
 pub async fn run_worker(
@@ -54,19 +58,15 @@ pub async fn run_worker(
     client: Client,
 ) -> Result<(), WorkerError> {
     loop {
-        select! {
-            _ = shutdown.cancelled() => return Ok(()),
-            maybe_job = jobs.recv() => {
-                let Some(job) = maybe_job else {
-                    return Ok(());
-                };
+        let job = select! {
+            () = shutdown.cancelled() => return Ok(()),
+            maybe_job = jobs.recv() => match maybe_job {
+                Some(job) => job,
+                None => return Ok(()),
+            },
+        };
 
-                select! {
-                    _ = shutdown.cancelled() => return Ok(()),
-                    result = process_job(&client, job) => result?,
-                }
-            }
-        }
+        process_job(&client, job).await?;
     }
 }
 
@@ -93,6 +93,8 @@ async fn hash_file(path: PathBuf) -> Result<Digest, WorkerError> {
         .map_err(WorkerError::Hash)
 }
 ```
+
+Shutdown interrupts only the idle wait: a job that has been received is driven to completion, bounded by the timeout inside `process_job`. Race in-progress work against shutdown only when something owns the state needed to resume or retry it.
 
 ## Exceptions
 

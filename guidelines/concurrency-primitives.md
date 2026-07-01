@@ -40,7 +40,7 @@ Load this page when adding channels, locks, atomics, worker pools, shared state,
 
 ## Async Notes
 
-Fabro-style lint rules are relevant for async projects. Use `clippy::disallowed_methods` and `clippy::disallowed_types` to catch blocking APIs such as `std::thread::sleep`, `std::thread::spawn`, `std::process::Command`, `std::fs`, `std::io`, and `std::net` on async paths.
+Async projects should enforce blocking-API bans with `clippy::disallowed_methods` and `clippy::disallowed_types`; the lint tables in [the new project workflow](../workflows/new-rust-project.md) are the baseline. Both lints match item paths, not modules: list functions such as `std::thread::sleep`, `std::thread::spawn`, and `std::process::Command::new` under `disallowed_methods`, and types or traits such as `std::net::TcpStream` and `std::io::Read` under `disallowed_types`.
 
 Do not treat those lints as a blanket ban on `std::sync`. Standard-library locks are fine in async code when the critical section is short, does not block, and the guard is dropped before `.await`.
 

@@ -58,6 +58,8 @@ pub async fn fetch_user(client: &reqwest::Client, user_id: UserId) -> Result<Use
         return Err(ClientError::NotFound { user_id });
     }
 
+    let response = response.error_for_status()?;
+
     Ok(response.json().await?)
 }
 ```

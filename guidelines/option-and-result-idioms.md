@@ -39,10 +39,10 @@ Use simple combinators for short local transformations, and switch to explicit b
 Use combinators for local extraction and explicit branching for meaningful decisions:
 
 ```rust
-pub fn build_request(input: Input) -> Result<Request, Error> {
+pub fn build_request(input: &Input) -> Result<Request, Error> {
     let id = input
         .id()
-        .ok_or_else(|| Error::MissingField { field: "id" })?;
+        .ok_or(Error::MissingField { field: "id" })?;
 
     let label = input
         .label()

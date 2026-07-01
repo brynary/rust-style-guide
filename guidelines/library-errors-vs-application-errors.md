@@ -19,6 +19,7 @@ Library callers need stable types they can inspect and branch on. Applications u
 - Use `anyhow::Result<T>` in binaries, command handlers, workers, tests, and internal application glue.
 - Add application context with `.context(...)` or `.with_context(...)` instead of stringifying the source error.
 - Use `miette` for CLI diagnostics that benefit from labels, source snippets, help text, or polished reports.
+- Convert to `miette` only at the presentation layer: std and `thiserror` errors do not cross `?` into `miette::Report` without `IntoDiagnostic::into_diagnostic()` or `#[derive(Diagnostic)]`, so keep internal errors on `thiserror` or `anyhow`.
 - Keep typed domain errors in application code when code branches on the failure.
 
 ## Avoid

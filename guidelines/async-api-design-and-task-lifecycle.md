@@ -18,7 +18,7 @@ Load this page when adding async APIs, spawning Tokio tasks, introducing async t
 - Keep pure helpers, validation, formatting, parsing, and small local transforms synchronous.
 - Use async traits only when callers need an abstraction, not just because implementations are async.
 - Add `Send + 'static` bounds only when values cross a spawned task, thread, or stored future boundary.
-- Keep spawned futures and task-boundary errors `Send + 'static`; erased errors crossing `tokio::spawn` boundaries need `Send + Sync + 'static`.
+- Keep spawned futures and task-boundary errors `Send + 'static`; `tokio::spawn` requires only `Send + 'static`, and adding `Sync` to erased errors is an interop convention for `anyhow`-style errors, not a spawn requirement.
 - Spawn tasks from an owner that stores handles, cancellation tokens, and task-specific state.
 - Model long-lived application services, external connections, gateways, pollers, and subscribers as owner structs with `new` and `run`/`shutdown` methods, even when the first version only awaits one client future.
 - Name task owner types by responsibility, such as `Poller`, `WorkerSet`, `TaskGroup`, or `Supervisor`.
@@ -31,6 +31,7 @@ Load this page when adding async APIs, spawning Tokio tasks, introducing async t
 ## Avoid
 
 - Do not call `tokio::spawn` and drop the `JoinHandle` for important work.
+- Do not assume dropping a `JoinHandle` cancels the task; it detaches, and the task keeps running, so dropping an owner type without calling `shutdown` leaks the loop unless `Drop` cancels the token.
 - Do not hide background tasks inside constructors unless the returned value owns their lifecycle.
 - Do not swallow task errors with `let _ = handle.await`.
 - Do not spawn in a library merely to make the API look nonblocking.
@@ -88,12 +89,14 @@ pub async fn run_poller(
 ) -> Result<(), PollerError> {
     loop {
         select! {
-            _ = shutdown.cancelled() => return Ok(()),
+            () = shutdown.cancelled() => return Ok(()),
             result = poll_once(&client) => result?,
         }
     }
 }
 ```
+
+Dropping a `Poller` without calling `shutdown` detaches the task: the loop keeps running until the token is cancelled.
 
 Reusable libraries should expose the `run_poller`-style future unless they need the owner type for real lifecycle behavior.
 

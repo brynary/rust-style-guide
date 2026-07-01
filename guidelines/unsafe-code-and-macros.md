@@ -21,7 +21,7 @@ Unsafe code creates proof obligations the compiler cannot check, so the default 
 - Keep unsafe blocks as small as possible; put safe validation and branching outside them.
 - Put a `SAFETY:` comment next to every unsafe block or impl in crates that are allowed to use unsafe.
 - Document every public unsafe function or trait with `# Safety`.
-- Run `cargo miri test` for crates with project-written unsafe when Miri supports the target.
+- Run `cargo +nightly miri test` for crates with project-written unsafe when Miri supports the target (install once with `rustup +nightly component add miri`).
 - Keep FFI crates thin: translate portable boundary types and call safe core logic.
 - Use `macro_rules!` for repeated impls, repeated tests, small declarative patterns, and local boilerplate that ordinary functions or traits cannot simplify cleanly.
 - Use proc macros only when a derive, attribute, or function-like macro materially reduces boilerplate across many call sites.

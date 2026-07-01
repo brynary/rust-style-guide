@@ -76,13 +76,15 @@ At the boundary, render or serialize deliberately:
 
 ```rust
 fn to_api_error(err: LoadProfileError) -> ApiError {
-    tracing::warn!(error = ?err, "failed to load profile");
-
-    match err {
+    match &err {
         LoadProfileError::NotFound { id } => {
+            tracing::warn!(error = ?err, "profile not found");
             ApiError::not_found(format!("profile {id} not found"))
         }
-        _ => ApiError::internal("failed to load profile"),
+        _ => {
+            tracing::error!(error = ?err, "failed to load profile");
+            ApiError::internal("failed to load profile")
+        }
     }
 }
 ```

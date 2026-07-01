@@ -13,6 +13,7 @@ Iterator chains are compact when they read as a pipeline. Loops are clearer when
 - Use `.iter()`, `.iter_mut()`, and `.into_iter()` intentionally based on whether the code borrows, mutates, or consumes values.
 - Use `map`, `filter`, `filter_map`, `flat_map`, `find`, `any`, `all`, and `position` when they directly name the operation.
 - Use `collect` when the target collection is clear; add a type annotation when inference makes the result hard to see.
+- Collect fallible maps with `collect::<Result<Vec<_>, _>>()` (or the `Option` equivalent) to fail fast on the first error; reserve `try_fold` for accumulation that carries state.
 - Use `try_fold` or `try_for_each` for short fallible accumulation or validation when it stays readable.
 - Use `for` loops for branching, mutation, early `break`/`continue`, multiple accumulators, or nontrivial error handling.
 - Keep closures short; extract a named helper when a closure has branching, side effects, or reused logic.

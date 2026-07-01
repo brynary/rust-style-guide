@@ -15,6 +15,7 @@ Rust's ownership model is usually the simplest concurrency and mutation model. S
 - Use `Box<dyn Trait>` for owned dynamic dispatch when one owner is enough.
 - Use `Rc<T>` only for single-threaded shared ownership.
 - Use `Arc<T>` for shared ownership across threads or Tokio tasks.
+- Use `Weak` (`std::rc::Weak` or `std::sync::Weak`) to break parent-child or observer cycles.
 - Use `.clone()` consistently for `Rc`, `Arc`, and ordinary cloned values.
 - Use `Mutex<T>` for shared mutable state with short critical sections.
 - Use `RwLock<T>` only when many readers and few writers make that extra complexity worthwhile.
@@ -26,6 +27,7 @@ Rust's ownership model is usually the simplest concurrency and mutation model. S
 
 - Do not use `Arc<Mutex<T>>` as the default way to avoid ownership design.
 - Do not use `Rc` or `RefCell` in multi-threaded code.
+- Do not create `Rc` or `Arc` cycles; two strong references pointing at each other are never freed and leak the whole graph.
 - Do not use `RefCell` when a normal `&mut self` API would work.
 - Do not hold locks across blocking I/O, callbacks, or `.await` points.
 - Do not choose `RwLock` just because reads are common; start with `Mutex` unless contention matters.

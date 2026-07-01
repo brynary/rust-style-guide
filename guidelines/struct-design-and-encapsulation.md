@@ -42,7 +42,7 @@ pub struct EmailAddress {
 }
 
 impl EmailAddress {
-    pub fn parse(value: impl Into<String>) -> Result<Self, EmailAddressError> {
+    pub fn try_new(value: impl Into<String>) -> Result<Self, EmailAddressError> {
         let value = value.into();
 
         if !value.contains('@') {
@@ -56,6 +56,14 @@ impl EmailAddress {
         &self.value
     }
 }
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum EmailAddressError {
+    MissingAt,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct UserId(u64);
 
 pub struct UserAccount {
     id:     UserId,

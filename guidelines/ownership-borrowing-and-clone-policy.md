@@ -12,10 +12,10 @@ Borrowed inputs keep call sites flexible. Owned values avoid tying callers to in
 
 - Use `&self` for observation, `&mut self` for in-place mutation, and `self` for consuming transitions.
 - Accept borrowed inputs such as `&str`, `&[T]`, `&Path`, and `&Thing` by default.
-- Clone internally when storing a borrowed input keeps the constructor or setter simple.
+- Take ownership in constructors and setters that store the value unchanged; clone internally when storing a normalized or derived value from borrowed input.
 - Return borrowed values from plain accessors when the lifetime is obvious.
 - Return owned snapshots, IDs, handles, or collections when returning references would expose unnecessary lifetimes, and name owned snapshots explicitly.
-- Use `.clone()` for ordinary values, `Rc`, and `Arc`.
+- Use `.clone()` for ordinary values, `Rc`, and `Arc`; this deliberately deviates from the std docs' `Arc::clone(&value)` preference in favor of one consistent spelling.
 - Prefer explicit owned snapshot types when callers need stable data after mutation.
 - Revisit clone costs only when profiling or domain knowledge shows they matter.
 
@@ -36,10 +36,8 @@ For internal application code, favor the simplest API and clone at boundaries. F
 ## Example
 
 ```rust
-use std::{
-    path::{Path, PathBuf},
-    sync::Arc,
-};
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
 
 #[derive(Clone, Debug)]
 pub struct Settings {
@@ -48,10 +46,10 @@ pub struct Settings {
 }
 
 impl Settings {
-    pub fn new(service_name: &str, root: &Path) -> Self {
+    pub fn new(service_name: impl Into<String>, root: PathBuf) -> Self {
         Self {
-            service_name: service_name.to_owned(),
-            root:         root.to_path_buf(),
+            service_name: service_name.into(),
+            root,
         }
     }
 
@@ -71,11 +69,8 @@ pub struct Client {
 }
 
 impl Client {
-    pub fn new(settings: Arc<Settings>, labels: &[String]) -> Self {
-        Self {
-            settings,
-            labels:   labels.to_vec(),
-        }
+    pub fn new(settings: Arc<Settings>, labels: Vec<String>) -> Self {
+        Self { settings, labels }
     }
 
     pub fn settings(&self) -> &Settings {
@@ -90,8 +85,8 @@ impl Client {
         self.labels.clone()
     }
 
-    pub fn add_label(&mut self, label: &str) {
-        self.labels.push(label.to_owned());
+    pub fn add_label(&mut self, label: impl Into<String>) {
+        self.labels.push(label.into());
     }
 
     pub fn into_labels(self) -> Vec<String> {

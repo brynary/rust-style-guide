@@ -16,7 +16,7 @@ Rust visibility is an API design tool. Smaller public surfaces make invariants e
 - Use `pub(super)` only for tight parent-child module collaboration.
 - Re-export the public types callers should name from the crate root or a focused facade module.
 - Choose one canonical public path for each local item: either a facade re-export or a public module path.
-- Use `#[doc(inline)]` on intentional facade re-exports so rustdoc presents the item at the path callers should use.
+- Use `#[doc(inline)]` when re-exporting from a public module or another crate so rustdoc presents the item at the facade path; re-exports from private modules are inlined automatically.
 - Use public fields only for plain data structs with no invariants.
 - Keep internal helper modules behind `mod`, not `pub mod`.
 
@@ -45,13 +45,12 @@ For applications, `pub(crate)` is often enough for cross-module use. Avoid publi
 mod client;
 mod error;
 mod request;
+mod response;
 
-#[doc(inline)]
 pub use client::Client;
-#[doc(inline)]
 pub use error::ClientError;
-#[doc(inline)]
 pub use request::Request;
+pub use response::Response;
 ```
 
 ```rust
@@ -59,7 +58,9 @@ pub use request::Request;
 mod retry;
 mod transport;
 
-use crate::{ClientError, Request};
+use url::Url;
+
+use crate::{ClientError, Request, Response};
 
 pub struct Client {
     transport: transport::Transport,

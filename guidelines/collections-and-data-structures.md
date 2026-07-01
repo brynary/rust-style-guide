@@ -17,6 +17,7 @@ Standard collections are familiar, well-tested, dependency-free, and usually fas
 - Sort a `Vec<T>` before output when deterministic order is only needed at the boundary.
 - Use capacity hints such as `Vec::with_capacity` when the size is already known.
 - Use `retain`, `drain`, and `std::mem::take` for clear in-place collection updates.
+- Use `entry(key).or_insert_with(...)` or `or_default()` for map insert-or-update instead of a `contains_key` check followed by `insert`, the double lookup clippy's `map_entry` flags.
 - Use newtypes around collections when the collection has domain invariants or behavior.
 - Add crates such as `indexmap`, `smallvec`, or domain-specific data structures only when their semantics or measured performance matter.
 

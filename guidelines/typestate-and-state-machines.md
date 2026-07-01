@@ -8,6 +8,10 @@ Use typestate broadly for workflows with ordered states; use runtime enums when 
 
 Typestate makes invalid transitions fail to compile. It is a good fit for workflows where values move through known phases and later operations require earlier steps to have happened.
 
+## Activation
+
+Load this page when a value moves through ordered phases such as draft-to-published or connected-to-authenticated, or when choosing between compile-time states and runtime state enums. Skip it for ordinary optional configuration, which uses plain constructors and builders.
+
 ## Do
 
 - Use typestate for ordered workflows such as draft-to-published, configured-to-started, connected-to-authenticated, or parsed-to-validated.

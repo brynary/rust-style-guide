@@ -8,6 +8,10 @@ Treat sync vs async as an explicit project-level architecture decision; document
 
 Async changes function signatures, trait design, tests, runtime setup, cancellation, shutdown, and dependency choices. It spreads through a codebase, so agents should not introduce or remove async as a local convenience.
 
+## Activation
+
+Load this page when choosing or reviewing a project's sync-vs-async posture or when adding the first async dependency. The task-lifecycle, cancellation, and concurrency pages cover the details once the posture is set.
+
 ## Do
 
 - Check the project's documented async posture before adding async APIs, blocking calls, runtime setup, or spawned tasks.
@@ -17,14 +21,14 @@ Async changes function signatures, trait design, tests, runtime setup, cancellat
 - Use Tokio for async runtime integration when the project is async.
 - Use async for real async work: network I/O, timers, streaming, subprocess orchestration, concurrent service work, and APIs that are already Tokio-based.
 - Keep CPU-bound computation, parsing, validation, formatting, and simple local transforms synchronous.
-- Use sync helpers inside async code when they are short, CPU-local, and do not block on I/O or locks.
+- Use sync helpers inside async code when they are short, CPU-local, and do not block on I/O or hold contended locks; see [concurrency primitives](concurrency-primitives.md) for the lock policy.
 - For reusable libraries, make runtime assumptions visible in docs, feature names, or crate-level conventions.
 
 ## Avoid
 
 - Do not convert a module to async only because the caller is async.
 - Do not hide runtime creation inside a reusable library.
-- Do not call blocking I/O, long CPU work, or blocking locks directly on Tokio worker threads.
+- Do not call blocking I/O, long CPU work, or long-held or contended locks directly on Tokio worker threads; short `std::sync` critical sections are fine.
 - Do not add runtime-agnostic abstraction after the project has explicitly chosen Tokio and no caller needs another runtime.
 - Do not expose async APIs from a library without documenting runtime assumptions.
 - Do not maintain parallel sync and async APIs unless both are real project requirements.
@@ -76,4 +80,4 @@ fn render_response(record: Record) -> Response {
 
 - Use a sync posture for CLIs, libraries, or tools whose work is mostly local, CPU-bound, or short-lived.
 - Add runtime abstraction only when the project has real callers on multiple runtimes.
-- Keep a small sync wrapper around async code only when it is an application convenience and runtime ownership is obvious.
+- Keep a small sync wrapper around async code only when it is an application convenience and runtime ownership is obvious. The obvious implementation (`Runtime::block_on` or `Handle::block_on`) panics when called from within a runtime, so the wrapper must be reachable only from genuinely synchronous call paths.

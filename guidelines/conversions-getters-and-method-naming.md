@@ -11,11 +11,11 @@ Concrete refs make APIs easy to read and call. Owned returns and internal clones
 ## Do
 
 - Accept `&str`, `&[T]`, `&Path`, and concrete refs for read-only inputs by default.
-- Clone internally when storing borrowed input or returning an explicitly owned result keeps the API simpler.
+- Clone internally when a constructor stores a normalized or derived value from borrowed input, or when returning an explicitly owned result keeps the API simpler.
 - Return borrowed values from cheap field-like accessors where the lifetime is obvious.
 - Return owned values from queries, snapshots, and builders when returning references would expose unnecessary lifetimes.
 - Use `impl AsRef<Path>` or similar bounds only when the API is clearly path-like and caller flexibility helps.
-- Use `impl Into<String>` or `impl Into<T>` mainly for constructors and setters that store the owned value.
+- Take owned values or `impl Into<T>` in constructors and setters that store the value unchanged.
 - Use `From` for infallible, obvious conversions.
 - Use `TryFrom` or `FromStr` for validation and fallible parsing.
 - Use `From` for lossless numeric widening and `TryFrom` or `TryInto` for narrowing or signedness changes.
@@ -49,11 +49,9 @@ Trait impls such as `From`, `TryFrom`, `AsRef`, and `Deref` become part of the p
 ## Example
 
 ```rust
-use std::{
-    fmt,
-    path::{Path, PathBuf},
-    str::FromStr,
-};
+use std::fmt;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ProjectName(String);
@@ -114,11 +112,8 @@ pub struct ProjectConfig {
 }
 
 impl ProjectConfig {
-    pub fn new(root: &Path, name: &ProjectName) -> Self {
-        Self {
-            root: root.to_path_buf(),
-            name: name.clone(),
-        }
+    pub fn new(root: PathBuf, name: ProjectName) -> Self {
+        Self { root, name }
     }
 
     pub fn root(&self) -> &Path {

@@ -80,15 +80,26 @@ pub fn load_config(path: &Path) -> Result<Config, ConfigError> {
 Good: application code adds boundary context and preserves the source:
 
 ```rust
+use std::path::PathBuf;
+
 use anyhow::{Context, Result};
 
 fn run() -> Result<()> {
-    let path = std::path::PathBuf::from("config.toml");
+    let path = PathBuf::from("config.toml");
     let config = config_lib::load_config(&path)
         .with_context(|| format!("failed to load configuration from {}", path.display()))?;
 
     start_server(config).context("failed to start server")?;
     Ok(())
+}
+```
+
+At the outermost boundary, render an `anyhow` chain with the alternate format (`{err:#}`) or by returning `Result` from `main`; `Display` on `anyhow::Error` prints only the outermost context.
+
+```rust
+#[expect(clippy::print_stderr, reason = "top-level CLI error report")]
+fn report_error(error: &anyhow::Error) {
+    eprintln!("error: {error:#}");
 }
 ```
 

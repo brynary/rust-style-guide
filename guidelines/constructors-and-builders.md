@@ -11,13 +11,13 @@ Simple constructors keep invariants close to the type. Builders are useful when 
 ## Do
 
 - Use `new` for infallible construction from required values.
-- Use `try_new` or `parse` when construction validates caller input or can fail.
+- Use `try_new` when construction validates caller input or can fail; reserve `parse` for `FromStr`-backed textual parsing.
 - Keep validation inside the constructor or `build` method.
 - Use `Default` only when there is an obvious, useful default value.
 - Use a builder when a type has several optional fields, many defaults, or call sites would otherwise pass booleans and `None` values.
 - Prefer consuming builder setters like `fn timeout(mut self, value: Duration) -> Self` for owned configuration builders.
 - Use `with_*` for derived variants or optional modifications, not as a substitute for a clear primary constructor.
-- Use typestate only when the compile-time state transition protects an important invariant or prevents a dangerous operation.
+- Use typestate builders only when the compile-time ordering protects an important invariant or prevents a dangerous operation; for workflow state machines, follow [typestate and state machines](typestate-and-state-machines.md).
 
 ## Avoid
 
@@ -97,6 +97,7 @@ impl ClientOptions {
 }
 
 #[derive(Clone, Debug)]
+#[must_use]
 pub struct ClientOptionsBuilder {
     timeout:      Duration,
     retry_policy: RetryPolicy,
@@ -107,10 +108,8 @@ impl Default for ClientOptionsBuilder {
     fn default() -> Self {
         Self {
             timeout:      Duration::from_secs(30),
-            retry_policy: RetryPolicy {
-                max_attempts: 3,
-                backoff:      Duration::from_millis(200),
-            },
+            retry_policy: RetryPolicy::try_new(3, Duration::from_millis(200))
+                .expect("default retry policy is valid"),
             user_agent:   None,
         }
     }

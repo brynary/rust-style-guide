@@ -17,6 +17,7 @@ Derived impls are cheap and correct when the type's structure matches the trait 
 - Derive `PartialEq` and `Eq` when field-by-field equality is the domain equality.
 - Derive `Hash` only when equality and hashing should use the same stable fields.
 - Derive `Ord` and `PartialOrd` only when there is one obvious total ordering.
+- Keep hand-written `PartialEq`, `Eq`, `Hash`, and `Ord` coherent: `a == b` must imply equal hashes, every impl must use the same fields, and mixing a manual `PartialEq` with a derived `Hash` silently breaks `HashMap` and `HashSet` lookups.
 - Derive or implement `Default` only when the default is valid, useful, and unsurprising.
 - Hand-write `Display` for stable user-facing text.
 

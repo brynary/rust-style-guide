@@ -40,6 +40,8 @@ Libraries should encode public API invariants in types and constructors so calle
 ```rust
 use std::path::{Path, PathBuf};
 
+use thiserror::Error;
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct WorkspaceName(String);
 
@@ -66,9 +68,11 @@ impl WorkspaceName {
     }
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Error, PartialEq)]
 pub enum WorkspaceNameError {
+    #[error("workspace name must not be empty")]
     Empty,
+    #[error("workspace name must contain only ASCII letters, digits, or '-'")]
     InvalidCharacter,
 }
 

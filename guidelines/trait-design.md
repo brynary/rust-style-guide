@@ -19,6 +19,7 @@ Traits are extension contracts. Small traits are easier to implement, test, obje
 - Use generic methods when each caller chooses the type for that call.
 - Keep bounds close to the function that needs them, preferably in a `where` clause for complex bounds.
 - Make traits object-safe when they are intended for `dyn Trait`.
+- Add `where Self: Sized` to generic provided methods, such as ones taking `impl Into<String>`, on traits meant for trait objects; without that opt-out, a generic method makes the trait unusable as `dyn Trait`.
 - Seal public traits when users should call trait methods but should not implement the trait outside the crate.
 
 ## Avoid

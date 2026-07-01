@@ -11,7 +11,7 @@ The edition controls language compatibility, and `rust-version` tells Cargo and 
 ## Do
 
 - Set `edition = "2024"` for Rust 2024 crates.
-- Set `rust-version = "1.85"` for Rust 2024 crates unless the project has a higher or lower documented MSRV.
+- Set `rust-version = "1.85"` for Rust 2024 crates unless the project has a higher documented MSRV; supporting a lower MSRV requires an older edition.
 - Keep workspace member editions and MSRVs consistent unless a crate has a specific reason to differ.
 - Treat MSRV bumps in reusable libraries as public compatibility changes.
 - Check library changes against the declared MSRV, not only the local stable compiler, and include all feature-gated code.
