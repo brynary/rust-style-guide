@@ -34,10 +34,8 @@ Consistent names and imports make code easier for agents to scan and modify. Rus
 
 ```rust
 use std::path::Path;
-use std::time::Duration;
 
 use anyhow::{Context as _, Result};
-use tracing::debug;
 
 use crate::{Config, EmailAddress, RunId, RunStatus, Timestamp, UserId};
 
@@ -70,12 +68,6 @@ pub struct RunSummary {
 }
 
 pub fn load_config(path: &Path) -> Result<Config> {
-    debug!(
-        path = %path.display(),
-        timeout_ms = Duration::from_secs(5).as_millis(),
-        "loading config"
-    );
-
     Config::load(path).context("loading config")
 }
 ```

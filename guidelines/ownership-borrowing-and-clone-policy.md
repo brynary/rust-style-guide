@@ -77,20 +77,8 @@ impl Client {
         self.settings.as_ref()
     }
 
-    pub fn labels(&self) -> &[String] {
-        &self.labels
-    }
-
-    pub fn labels_snapshot(&self) -> Vec<String> {
-        self.labels.clone()
-    }
-
     pub fn add_label(&mut self, label: impl Into<String>) {
         self.labels.push(label.into());
-    }
-
-    pub fn into_labels(self) -> Vec<String> {
-        self.labels
     }
 }
 ```

@@ -35,32 +35,11 @@ For application internals, private fields are still the default, but `pub(crate)
 
 ## Example
 
+`EmailAddress` is a validated newtype; its constructor and validation live on the [newtype pattern](newtype-pattern-and-semantic-wrappers.md) page.
+
 ```rust
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct EmailAddress {
-    value: String,
-}
-
-impl EmailAddress {
-    pub fn try_new(value: impl Into<String>) -> Result<Self, EmailAddressError> {
-        let value = value.into();
-
-        if !value.contains('@') {
-            return Err(EmailAddressError::MissingAt);
-        }
-
-        Ok(Self { value })
-    }
-
-    pub fn as_str(&self) -> &str {
-        &self.value
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum EmailAddressError {
-    MissingAt,
-}
+pub struct EmailAddress(String);
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct UserId(u64);
