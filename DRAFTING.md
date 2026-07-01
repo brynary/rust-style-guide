@@ -25,6 +25,8 @@ Use these instructions when turning the outline into guideline pages.
 ## Page Rules
 
 - Use [TEMPLATE.md](TEMPLATE.md) for every guideline page.
+- Give every rule exactly one owner page; sibling pages may carry at most a one-line reminder that links to the owner.
+- Make examples demonstrate only the owning page's rules; incidental code in an example follows other pages' rules but does not showcase them.
 - Make the `Rule` section a direct default, not a discussion.
 - Keep `Why` short and practical.
 - Prefer concrete guidance over philosophy.
