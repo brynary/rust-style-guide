@@ -56,10 +56,9 @@ Guideline pages are policy. Do not load every guideline page by default.
 
 ## Everyday Implementation
 
-- [Control flow](guidelines/control-flow.md) - load when choosing `match`, `if let`, `let else`, guards, early returns, or combinators.
+- [Control flow](guidelines/control-flow.md) - load when choosing `match`, `if let`, `let else`, guards, early returns, combinators, mutable locals, or in-place updates.
 - [Option and Result idioms](guidelines/option-and-result-idioms.md) - load when transforming `Option`/`Result`, using `ok_or_else`, `transpose`, `map`, or explicit branching.
 - [Iterators, closures, and loops](guidelines/iterators-closures-and-loops.md) - load when choosing iterator chains, loops, closure capture, `collect`, `fold`, or `try_fold`.
-- [Mutation style](guidelines/mutation-style.md) - load when choosing mutable locals, in-place updates, immutable transforms, or builder-style mutation.
 
 ## Testing and Release
 

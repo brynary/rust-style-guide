@@ -62,7 +62,6 @@
 - [Control Flow](guidelines/control-flow.md)
 - [Option and Result Idioms](guidelines/option-and-result-idioms.md)
 - [Iterators, Closures, and Loops](guidelines/iterators-closures-and-loops.md)
-- [Mutation Style](guidelines/mutation-style.md)
 
 # Testing and Release
 

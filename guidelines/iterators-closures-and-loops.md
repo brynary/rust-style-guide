@@ -20,7 +20,6 @@ Iterator chains are compact when they read as a pipeline. Loops are clearer when
 - Use `move` closures when a closure outlives the current scope, is spawned, or ownership is clearer than borrowing.
 - Clone into closures when that avoids awkward lifetimes and the cost is not known to matter.
 - Prefer `enumerate` and `zip` over manual index tracking when pairing is direct.
-- Refactor to satisfy Clippy's iterator and loop suggestions instead of adding local lint bypasses.
 
 ## Avoid
 
@@ -30,7 +29,6 @@ Iterator chains are compact when they read as a pipeline. Loops are clearer when
 - Do not `collect` into a temporary collection only to iterate over it once.
 - Do not hide logging, metrics, mutation, or I/O inside `map` or `filter` closures.
 - Do not rely on dense closure inference when a named helper or local type annotation would clarify intent.
-- Do not add local `#[allow]` or `#[expect]` attributes for Clippy iterator-vs-loop idiom lints.
 
 ## Example
 

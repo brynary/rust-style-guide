@@ -15,8 +15,7 @@ Rust supports data with behavior without inheritance. Clear types, ownership, an
 - Keep fields private unless the type is plain data with no invariants.
 - Prefer direct composition with explicit fields and methods.
 - Use small, behavior-focused traits for open extension points.
-- Use iterator chains for simple transforms, filters, and collections.
-- Use explicit loops for branching, mutation, early exits, fallible accumulation, or multi-step logic.
+- Use iterator chains for simple transformations and loops for branching, mutation, early exits, or multi-step logic; see [iterators, closures, and loops](iterators-closures-and-loops.md).
 - Keep parsing, normalization, validation, and command behavior on the domain type that owns the data when there is a natural receiver.
 
 ## Avoid
@@ -26,7 +25,6 @@ Rust supports data with behavior without inheritance. Clear types, ownership, an
 - Do not expose free functions as public API merely to make tests reach private behavior.
 - Do not create pass-through wrapper types whose main job is forwarding.
 - Do not add delegation crates or macros to hide a confused boundary.
-- Do not write clever iterator chains when a loop communicates the intent better.
 - Do not choose pattern names over Rust's simpler type, module, and ownership tools.
 
 ## Example

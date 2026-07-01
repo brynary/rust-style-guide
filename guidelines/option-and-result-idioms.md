@@ -19,16 +19,14 @@ Use simple combinators for short local transformations, and switch to explicit b
 - Use `map_err` only for local typed error conversion that preserves the source error.
 - Use `transpose` for `Option<Result<T, E>>` to produce `Result<Option<T>, E>`.
 - Use `let else`, `if let`, or `match` when the missing/error case has branching, logging, metrics, cleanup, retries, or recovery.
-- Add error context at operation or layer boundaries, not on every small combinator.
-- Treat Clippy as authoritative when it recommends a specific `Option` or `Result` idiom.
+- Add error context at boundaries per [error propagation](error-propagation-context-and-messages.md), not on every small combinator.
+- Treat Clippy as authoritative for combinator-vs-branching idioms; refactor instead of adding local bypasses ([rustc and Clippy lints](rustc-and-clippy-lints.md)).
 
 ## Avoid
 
 - Do not chain combinators until the control flow is harder to read than a `match`.
-- Do not add local `#[allow]` or `#[expect]` attributes for Clippy combinator-vs-branching lints; refactor instead.
 - Do not hide side effects in `map`, `and_then`, `or_else`, or `inspect`.
 - Do not use `.ok()` unless intentionally discarding the error cause at a boundary where absence is the right model.
-- Do not convert errors to strings during internal propagation.
 - Do not use `unwrap_or` when the fallback is expensive or allocates; use `unwrap_or_else`.
 - Do not use `unwrap_or_default` when absence is a domain error.
 - Do not use `is_some` followed by `unwrap`; use `if let`, `let else`, or `match`.
